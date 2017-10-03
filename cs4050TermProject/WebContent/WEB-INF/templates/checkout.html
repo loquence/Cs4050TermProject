@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+    <link href="../CSS/style.css" type="text/css" rel="stylesheet"/>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="script.js"></script>
+       
+    <title>Checkout</title>
+    <link rel="shortcut icon" type="image/png" href="http://weknowyourdreams.com/images/book/book-08.jpg"/>  
+    </head>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span> 
+                        </button>
+                        <a class="navbar-brand" href="#">Checkout</a>
+                    </div> 
+                    <div class="collapse navbar-collapse" id="myNavbar">
+                        <ul class="nav navbar-nav">
+                            <li class="active"><a href="index.html"><span class="glyphicon glyphicon-home"></span></a></li>
+                        </ul>
+                        
+                        <form class="navbar-form navbar-left">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search Catalog">
+                                <div class="input-group-btn">
+                                <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+                                </div>    
+                            </div>
+                        </form>
+                           
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="#"><span class="glyphicon glyphicon-shopping-cart">  Cart</span></a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-user"></span>  Profile</a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-log-out"></span>  Logout</a></li>
+                        </ul>
+                    </div>    
+                
+            </div>
+        </nav>
+        <div class="container-fluid">
+            <div class="col-md-4 col-md-offset-1">
+            <form>
+                <fieldset>
+                    <legend>Checkout</legend>
+                    <div class="form-group">
+                        <label for="addr">Shipping Address</label>
+                        <input type="text" class="form-control" id="addr">
+                    </div>
+                    <div class="form-group">
+                        <label for="city">City/Town</label>
+                        <input type="text" class="form-control" id="city">
+                    </div>
+                    <div class="form-group">
+                        <label for="state">State/Province/Region</label>
+                        <input type="text" class="form-control" id="state">
+                    </div>
+                    <div class="form-group">
+                        <label for="zip">Zip/Postal Code</label>
+                        <input type="text" class="form-control" id="zip">
+                    </div>
+                    <div class="form-group">
+                        <label for="country">Country</label>
+                        <input type="text" class="form-control" id="country">
+                    </div>
+                    <div class="form-group">
+                        <label for="cardinfo">Card Info</label>
+                        <input type="text" class="form-control" id="cardinfo">
+                    </div>
+                </fieldset> 
+            </form>
+        </div>
+    </div>
+</html>
