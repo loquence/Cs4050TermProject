@@ -1,5 +1,6 @@
 package boundary;
-
+import logiclayer.BookstoreLogicImpl;
+import objectlayer.*;
 import java.io.IOException;
 
 import javax.servlet.ServletConfig;
@@ -61,7 +62,25 @@ public class BookstoreServlet extends HttpServlet {
 		DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
 		SimpleHash root = new SimpleHash(db.build());
 		root.put("name", page);
-		
+		HttpSession session = request.getSession(false);
+		BookstoreLogicImpl bookstoreLogic = new BookstoreLogicImpl();
+		if (page.equals("signup")) {
+			String username = request.getParameter("username");
+			String email = request.getParameter("email");
+			String pwd = request.getParameter("pwd");
+			User u = new User(username,email,pwd);
+			int test = bookstoreLogic.createUser(u);
+			processor.processTemplate("confirm.html", root, request, response);
+		} 
+		if (page.equals("signin")) {
+			String email = request.getParameter("email");
+			String pwd = request.getParameter("pwd");
+			int check = bookstoreLogic.login(email, pwd);
+			if (check == 0) {
+				
+			}
+			
+		}
 		if (page.equals("profile")) {
 			template = "profile.html";
 			processor.processTemplate(template, root, request, response);
