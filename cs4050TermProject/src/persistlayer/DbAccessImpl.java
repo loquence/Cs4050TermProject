@@ -14,7 +14,8 @@ import freemarker.template.SimpleSequence;
 import persistlayer.DbAccessConfiguration;
 
 public class DbAccessImpl {
-	private static Connection con;
+	
+	
 	/**
 	 * connection 
 	 * @return

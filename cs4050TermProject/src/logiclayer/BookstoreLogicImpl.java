@@ -3,17 +3,18 @@ package logiclayer;
 import persistlayer.BookstorePersistImpl;
 import objectlayer.*;
 public class BookstoreLogicImpl {
-	BookstorePersistImpl bookstorePersist;
+	private BookstorePersistImpl bookstorePersist;
 	
 	public BookstoreLogicImpl() {
 		bookstorePersist = new BookstorePersistImpl();
 	}
 	
-	public int createUser(User u) {		
-		return bookstorePersist.addUser(u);
+	public int createCustomer(Customer u) {		
+		return bookstorePersist.addCustomer(u);
 	}
 	
-	public int login(String email, String pwd) {
-		return bookstorePersist.login(email,pwd);
+	public String checkEmail(String email){
+		return bookstorePersist.checkEmail(email);
 	}
+	
 }

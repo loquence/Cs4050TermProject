@@ -12,7 +12,10 @@
 
     <!-- Latest compiled JavaScript -->
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="script.js"></script>
+    <script>$(function(){
+    	$("#signupB").disabled = true;
+    	
+    })</script>
        
     <title>Sign Up</title>
     <link rel="shortcut icon" type="image/png" href="http://weknowyourdreams.com/images/book/book-08.jpg"/>    
@@ -24,20 +27,28 @@
                     <fieldset>
                         <legend>User Info</legend>
                         <div class="form-group">
-                            <label for="user">Username</label>
-                            <input type="text" class="form-control" name="username"id="user">
+                            <label for="fname">Name</label>
+                            <input type="text" class="form-control" name="fname"id="fname" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lname">Surname</label>
+                            <input type="text" class="form-control" name="lname"id="lname" required>
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" class="form-control" name="email" id="email">
+                            <input type="email" class="form-control" name="email" id="email" required>
                         </div>
                         <div class="form group">
                             <label for="pwd">Password</label>
-                            <input type="password"class="form-control" name="pwd" id="pwd">
+                            <input type="password"class="form-control" name="pwd" id="pwd" required>
+                        </div>
+                        <div class="form group">
+                            <label for="pwd2">Confirm Password</label>
+                            <input type="password"class="form-control" name="pwd2" id="pwd2" required>
                         </div>
                         <p></p>
                         <input type="hidden" name="page" value="signup">
-                        <button type="submit" class="btn btn-default">Create Your Account</button>
+                        <button type="submit" class="btn btn-default" id="signupB">Create Your Account</button>
                     </fieldset>    
                 </form>
             </div>    

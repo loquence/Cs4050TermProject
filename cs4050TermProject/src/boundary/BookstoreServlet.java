@@ -21,6 +21,14 @@ import freemarker.template.TemplateModelException;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import java.io.*;
+import java.util.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import javax.mail.*;
+import javax.mail.internet.*;
+import javax.naming.NamingException;
+import javax.activation.*;
 
 
 /**
@@ -31,6 +39,11 @@ public class BookstoreServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private TemplateProcessor processor;
     private static String templateDir = "/WEB-INF/templates"; 
+    private String host;
+    private String port;
+    private String username;
+    private String password;
+    
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -65,17 +78,58 @@ public class BookstoreServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 		BookstoreLogicImpl bookstoreLogic = new BookstoreLogicImpl();
 		if (page.equals("signup")) {
-			String username = request.getParameter("username");
+			String fname = request.getParameter("fname");
+			String lname = request.getParameter("lname");
 			String email = request.getParameter("email");
 			String pwd = request.getParameter("pwd");
-			User u = new User(username,email,pwd);
-			int test = bookstoreLogic.createUser(u);
-			processor.processTemplate("confirm.html", root, request, response);
+			Customer u = new Customer(fname,lname,email,pwd);
+			
+			session=request.getSession();
+			synchronized(session) {
+				session.setAttribute("email", email);
+				session.setAttribute("logged", false);
+			}
+			String to = email;
+			Mailer ml = new Mailer();
+			String checkEmail = bookstoreLogic.checkEmail(email);
+			if (checkEmail != null) {
+				if (checkEmail.equals(email)) {
+					root.put("emailExists", true);
+					processor.processTemplate("../../signup.html", root, request, response);
+				}
+			}
+			else {
+				int check = 0;
+			
+				try {
+					check = ml.send(to,"test","test");
+				} catch (NamingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					check = -1;
+				}
+				if (check < 0){
+					root.put("checkEmail", true);
+					processor.processTemplate("signup.html",root,request,response);
+				}
+				else {
+					int test = bookstoreLogic.createCustomer(u);
+					if (test == -1) {
+						root.put("database", true);
+						processor.processTemplate("signup.html", root, request, response);
+					}
+					else {
+						processor.processTemplate("confirm.html", root, request, response);
+					}
+				}
+			
+			}
 		} 
 		if (page.equals("signin")) {
 			String email = request.getParameter("email");
 			String pwd = request.getParameter("pwd");
-			int check = bookstoreLogic.login(email, pwd);
+			User u = new User("","",email,pwd);
+			int check = u.login();
 			if (check == 0) {
 				
 			}
@@ -85,6 +139,10 @@ public class BookstoreServlet extends HttpServlet {
 			template = "profile.html";
 			processor.processTemplate(template, root, request, response);
 		}
+	}
+	
+	private void checkEmail() {
+		
 	}
 
 }
