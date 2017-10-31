@@ -37,6 +37,8 @@ import javax.activation.*;
 @WebServlet("/BookstoreServlet")
 public class BookstoreServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final int unVerified = 0;
+	private static final int verified = 1;
     private TemplateProcessor processor;
     private static String templateDir = "/WEB-INF/templates"; 
     
@@ -76,7 +78,6 @@ public class BookstoreServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String page = request.getParameter("page");
-		String fillBooks = request.getParameter("fillBooks");
 		String template ="login.html";
 		DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
 		SimpleHash root = new SimpleHash(db.build());
@@ -88,7 +89,7 @@ public class BookstoreServlet extends HttpServlet {
 			String lname = request.getParameter("lname");
 			String email = request.getParameter("email");
 			String pwd = request.getParameter("pwd");
-			Customer u = new Customer(fname,lname,email,pwd);
+			Customer u = new Customer(fname,lname,email,pwd,unVerified);
 			
 			session=request.getSession();
 			synchronized(session) {
@@ -99,7 +100,7 @@ public class BookstoreServlet extends HttpServlet {
 			Mailer ml = new Mailer();
 			User checkEmail = bookstoreLogic.checkEmail(email);
 			if (checkEmail.getEmail() != null) {
-				if (checkEmail.equals(email)) {
+				if (checkEmail.getEmail().equals(email)) {
 					root.put("emailExists", true);
 					processor.processTemplate("../../signup.html", root, request, response);
 				}
@@ -125,7 +126,8 @@ public class BookstoreServlet extends HttpServlet {
 						processor.processTemplate("signup.html", root, request, response);
 					}
 					else {
-						processor.processTemplate("confirm.html", root, request, response);
+						response.setContentType("text/html");
+						response.getWriter().write("index.html");
 					}
 				}
 			
@@ -144,10 +146,6 @@ public class BookstoreServlet extends HttpServlet {
 		if (page.equals("profile")) {
 			template = "profile.html";
 			processor.processTemplate(template, root, request, response);
-		}
-		if(fillBooks.equals("fillBooks")) {
-			response.setContentType("text/html");
-			response.getWriter().println("it worked");
 		}
 	}
 	

@@ -17,7 +17,21 @@
     	var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
         $(function(){
             var checks= [0,0,0];
-        	$("button[type=submit]").attr('disabled',"disabled");
+            $("button[type=submit]").attr('disabled',"disabled");
+            $('signupFrm').submit(function(e){
+					e.preventDefault();
+					$.ajax({
+						type: $(this).attr('method'),
+						url: $(this).attr('action'),
+						data: $(this).serialize(),
+						success:function(responseText){
+								$('body').load(responseText);
+							}
+
+						})
+                });
+            
+        	
         	$("#allInputs").on('keyup focusin focusout', function(){
 					var ch = checks.every(isChecked);
 					if (ch){
@@ -32,10 +46,7 @@
         	function isChecked(element, index, array){
 					return element == 1;
             	}
-            function validate(){
-				 
-				
-            }
+            
             $(".pwds").on('keyup focusin focusout',function(){
             	var pwd = $("#pwd").val();
                 var pwd2 =$("#pwd2").val();
@@ -129,9 +140,12 @@
                                 	}
                                	}
                     	    }
-                         
-                
-                	}
+                         },
+                    	error: function(data) {
+								console.log('An error occured.');
+								console.log(data);
+
+                        	}
                     
                 	})
             	}
@@ -147,7 +161,7 @@
     <body>
         <div class="container">
             <div class="col-md-6 col-md-offset-3" id="allInputs">
-                <form action="#">
+                <form id="signupFrm"action="BookstoreServlet" method="post">
                     <fieldset>
                         <legend>User Info</legend>
                         <div class="input-group form-group">
@@ -178,7 +192,7 @@
                         </div>
                         <p></p>
                         <input type="hidden" name="page" value="signup">
-                        <button type="submit" class="btn btn-default" id="signupB" onclick="validate()">Create Your Account</button>
+                        <button type="submit" class="btn btn-default" id="signupB" >Create Your Account</button>
                     </fieldset>    
                 </form>
             </div>    

@@ -2,7 +2,7 @@ package persistlayer;
 import objectlayer.*;
 public class BookstorePersistImpl {
 	public int addCustomer(Customer u) {
-		String sql = "INSERT INTO users (name,email,password,type) VALUES" + "('"+u.getFname()+"','"+ u.getEmail() + "','"+ u.getPwd() +"','"+u.getType() +"');" ;
+		String sql = "INSERT INTO users (fname,lname,email,password,type,verified) VALUES" + "('"+u.getFname()+"','"+u.getLname()+"','"+ u.getEmail() + "','"+ u.getPwd() +"','"+u.getType() +"','"+u.getVerified()+"');" ;
 		return DbAccessImpl.create(sql);
 	}
 	
