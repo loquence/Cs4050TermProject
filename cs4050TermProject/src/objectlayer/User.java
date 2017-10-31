@@ -40,4 +40,8 @@ public class User {
 	public int login() {
 		return bookstorePersist.login(this);
 	}
+	
+	public User checkEmail() {
+		return bookstorePersist.checkEmail(this.email);
+	}
 }

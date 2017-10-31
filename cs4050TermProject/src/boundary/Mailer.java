@@ -1,5 +1,4 @@
 package boundary;
-import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -9,10 +8,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import java.io.*;
-import java.util.*;
-import javax.mail.*;
-import javax.mail.internet.*;
+
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

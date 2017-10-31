@@ -39,10 +39,6 @@ public class BookstoreServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private TemplateProcessor processor;
     private static String templateDir = "/WEB-INF/templates"; 
-    private String host;
-    private String port;
-    private String username;
-    private String password;
     
        
     /**
@@ -62,7 +58,16 @@ public class BookstoreServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doPost(request,response);
+		String page = request.getParameter("name");
+		
+		if (page.equals("fillBooks")) {
+			response.setContentType("text/html");
+			response.getWriter().write("noot noot");
+		}
+		if(page.equals("email")) {
+			checkEmail(request,response);
+			
+		}
 	}
 
 	/**
@@ -71,6 +76,7 @@ public class BookstoreServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String page = request.getParameter("page");
+		String fillBooks = request.getParameter("fillBooks");
 		String template ="login.html";
 		DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
 		SimpleHash root = new SimpleHash(db.build());
@@ -91,8 +97,8 @@ public class BookstoreServlet extends HttpServlet {
 			}
 			String to = email;
 			Mailer ml = new Mailer();
-			String checkEmail = bookstoreLogic.checkEmail(email);
-			if (checkEmail != null) {
+			User checkEmail = bookstoreLogic.checkEmail(email);
+			if (checkEmail.getEmail() != null) {
 				if (checkEmail.equals(email)) {
 					root.put("emailExists", true);
 					processor.processTemplate("../../signup.html", root, request, response);
@@ -139,9 +145,19 @@ public class BookstoreServlet extends HttpServlet {
 			template = "profile.html";
 			processor.processTemplate(template, root, request, response);
 		}
+		if(fillBooks.equals("fillBooks")) {
+			response.setContentType("text/html");
+			response.getWriter().println("it worked");
+		}
 	}
 	
-	private void checkEmail() {
+	private void checkEmail(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String email = request.getParameter("email");
+		User u = new User("","",email,"");
+		User test = u.checkEmail();
+		Gson gson = new Gson();
+		response.setContentType("application/json");
+		response.getWriter().write(gson.toJson(test));
 		
 	}
 

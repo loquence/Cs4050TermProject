@@ -12,7 +12,23 @@
 
     <!-- Latest compiled JavaScript -->
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="script.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            var val = {name:"fillBooks"}
+            $.ajax({
+                url:"BookstoreServlet",
+                data: val,
+                datatype:"json",
+                method:"GET",
+                success: function(responseText){
+                    alert(responseText); 
+            
+            }
+                
+            })
+        });
+        
+    </script>
        
     <title>Online Bookstore</title>
     <link rel="shortcut icon" type="image/png" href="http://weknowyourdreams.com/images/book/book-08.jpg"/>    

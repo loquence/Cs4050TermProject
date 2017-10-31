@@ -18,8 +18,8 @@ public class BookstorePersistImpl {
 		return -1;
 	}
 	
-	public String checkEmail(String email){
-		String sql ="SELECT email FROM users WHERE email=\'" + email + "\';";
-		return DbAccessImpl.getString(sql,"email");
+	public User checkEmail(String email){
+		String sql ="SELECT * FROM users WHERE email=\'" + email + "\';";
+		return new User("","", DbAccessImpl.getString(sql,"email"),"");
 	}
 }

@@ -1,4 +1,8 @@
-
+#invalidPass{
+    color:red;
+    display:none;
+    
+}
 
 
 .hoverDiv {
@@ -8,4 +12,15 @@
 
 .hoverDiv:hover {
     background:#f5f5f5;
+}
+
+.glyphicon.glyphicon-remove {
+	color:red;
+}
+
+.input-group {
+	width:100%;
+}
+.glyphicon.glyphicon-ok {
+	color:green;
 }

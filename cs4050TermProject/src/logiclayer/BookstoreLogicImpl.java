@@ -13,7 +13,7 @@ public class BookstoreLogicImpl {
 		return bookstorePersist.addCustomer(u);
 	}
 	
-	public String checkEmail(String email){
+	public User checkEmail(String email){
 		return bookstorePersist.checkEmail(email);
 	}
 	
