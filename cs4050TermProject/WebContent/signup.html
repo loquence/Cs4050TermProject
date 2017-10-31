@@ -14,49 +14,130 @@
     <!-- Latest compiled JavaScript -->
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript">
+    	var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
         $(function(){
-            
-            $("#pwds").focusout(function(){
+            var checks= [0,0,0];
+        	$("button[type=submit]").attr('disabled',"disabled");
+        	$("#allInputs").on('keyup focusin focusout', function(){
+					var ch = checks.every(isChecked);
+					if (ch){
+						$("#signupB").removeAttr('disabled');
+						}
+					else {
+						$("button[type=submit]").attr('disabled',"disabled");
+
+						}
+					
+            	});
+        	function isChecked(element, index, array){
+					return element == 1;
+            	}
+            function validate(){
+				 
+				
+            }
+            $(".pwds").on('keyup focusin focusout',function(){
             	var pwd = $("#pwd").val();
                 var pwd2 =$("#pwd2").val();
-                if (pwd !== pwd2){
-                    if (document.getElementById('invalidPWD')){
+				if(pwd.length > 7){
+					checks[1]=1;
+					if(document.getElementById('validPWD1')){
 
-                    }else {
-                    $('.pwds').append("<span class=\"input-group-addon\"><span class=\"glyphicon glyphicon-remove\"</span></span>");
-					$("#toGo").append("<p id=\"invalidPWD\" style=\"color:red\">These passwords are not the same</p>");
-					$("signupB").prop('cursor',"not-allowed");
+						}
+					else{
+						$("#shortPWD").remove();
+						$('#pwds1').append("<span id=\"validPWD1\"class=\"input-group-addon checkMarkPwd\"><span class=\"glyphicon glyphicon-ok\"</span></span>");
+
+					}
+                	if (pwd !== pwd2){
+                    	checks[2]=0;
+                    	if (document.getElementById('invalidPWD')){
+
+                    	}else {
+                    		$('#checkMarkPwd').remove();
+                    		$('#pwds2').append("<span id=\"xMarkPwd\"class=\"input-group-addon xMarkPwd\"><span class=\"glyphicon glyphicon-remove\"</span></span>");
+							$("#toGo").append("<p id=\"invalidPWD\" style=\"color:red\">These passwords are not the same</p>");
+							
+                    	}
+                	}
+                	else {
+                    	checks[2]=1;
+                    	if (document.getElementById('checkMarkPwd')){
+
+                        }else {
+							$('#invalidPWD').remove();
+							$('#xMarkPwd').remove();
+							$('#pwds2').append("<span id=\"checkMarkPwd\"class=\"input-group-addon checkMarkPwd\"><span class=\"glyphicon glyphicon-ok\"</span></span>")
+							
+                        }
                     }
-                }
+				}
+				else {
+					checks[1]=0;
+					if (document.getElementById('shortPWD')){
+
+						}
+					else {
+						$("#validPWD1").remove();
+						$('#toGoPwd').append("<p id=\"shortPWD\" style=\"color:red\">Passwords must be 8 characters or greater.</p>")
+						
+						
+					}
+
+					}    
             });
 
-            $("#emailDiv").focusout(function(){
+            $("#emailDiv").on('focusin focusout keyup',function(){
                 var em = $("#email").val();
             	var val = {name:"email", email:em}
-                $.ajax({
-                    url:"BookstoreServlet",
-                    data: val,
-                    datatype:"json",
-                    method:"GET",
-                    success: function(json){
-                     
-                       	if (!json.email){
-                           	if(!document.getElementById('checkMark')){
-                               	$('#xMark').remove();
-                       			$('#emailDiv').append("<span id =\"checkMark\" class=\"input-group-addon\"><span class=\"glyphicon glyphicon-ok\"</span></span>");
-                           	}
-                        }else {
-                            if(!document.getElementById('xMark')) {
-                                $('#checkMark').remove();
-                        		$('#emailDiv').append("<span id=\"xMark\" class=\"input-group-addon\"><span class=\"glyphicon glyphicon-remove\"</span></span>");
-                            }
-                        }
+            	if (!em.match(re)){
+                	if (document.getElementById('invalidEmail')){
+
+                    	}
+                	else {
+                    	checks[0]=0;
+                    	$('#checkMark').remove();
+                    	if(!document.getElementById('xMark')){
+        					$('#emailDiv').append("<span id=\"xMark\" class=\"input-group-addon\"><span class=\"glyphicon glyphicon-remove\"</span></span>");
+                    	}
+    					$('#toGoEmail').append("<p id=\"invalidEmail\" style=\"color:red\">This email is not valid.</p>");
+                	}
+               	}
+            	else {
+                	$('#invalidEmail').remove();
+               	 	$.ajax({
+                    	url:"BookstoreServlet",
+                    	data: val,
+                    	datatype:"json",
+                    	method:"GET",
+                    	success: function(json){
+                     		
+                       		if (!json.email){
+                           		checks[0]=1;
+                           		if(!document.getElementById('checkMark')){
+                               		$('#xMark').remove();
+                               		$('#emailDiv').append("<span id =\"checkMark\" class=\"input-group-addon\"><span class=\"glyphicon glyphicon-ok\"</span></span>");
+                               		$("#takenEmail").remove();
+                       				}
+                        	}else {
+                            	if(!document.getElementById('takenEmail')) {
+                                	checks[0]=0;
+                            		$('#toGoEmail').append("<p id=\"takenEmail\" style=\"color:red\">This email is not taken.</p>");
+                                	$('#checkMark').remove();
+                                	if(!document.getElementById('xMark')){
+                        				$('#emailDiv').append("<span id=\"xMark\" class=\"input-group-addon\"><span class=\"glyphicon glyphicon-remove\"</span></span>");
+                                	}
+                               	}
+                    	    }
                          
                 
-                }
+                	}
                     
-                })
+                	})
+            	}
             });
+
+            
     	});
     </script>
        
@@ -65,8 +146,8 @@
     </head>
     <body>
         <div class="container">
-            <div class="col-md-6 col-md-offset-3">
-                <form action="BookstoreServlet" method="post">
+            <div class="col-md-6 col-md-offset-3" id="allInputs">
+                <form action="#">
                     <fieldset>
                         <legend>User Info</legend>
                         <div class="input-group form-group">
@@ -81,19 +162,23 @@
                         <div class="input-group form-group" id="emailDiv">
                             <input type="email" class="form-control" name="email" id="email" required>
                         </div>
+                        <div id="toGoEmail">
+                        </div>
                         <label for="pwd">Password</label>
-                        <div class="input-group form-group pwds" >
+                        <div class="input-group form-group pwds" id="pwds1">
                             <input type="password"class="form-control " name="pwd" id="pwd" required>
                         </div>
+                        <div id="toGoPwd">
+                        </div>
                         <label for="pwd2">Confirm Password</label>
-                        <div class="input-group form-group pwds" id="pwds">
+                        <div class="input-group form-group pwds" id="pwds2">
                         	<input type="password"class="form-control" name="pwd2" id="pwd2" required>
                         </div>
                         <div id="toGo">
                         </div>
                         <p></p>
                         <input type="hidden" name="page" value="signup">
-                        <button type="submit" class="btn btn-default" id="signupB" >Create Your Account</button>
+                        <button type="submit" class="btn btn-default" id="signupB" onclick="validate()">Create Your Account</button>
                     </fieldset>    
                 </form>
             </div>    
