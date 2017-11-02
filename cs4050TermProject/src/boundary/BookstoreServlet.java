@@ -127,7 +127,14 @@ public class BookstoreServlet extends HttpServlet {
 					}
 					else {
 						response.setContentType("text/html");
-						response.getWriter().write("index.html");
+						response.getWriter().write("<form>\r\n" + 
+								"                    <fieldset>\r\n" + 
+								"                        <legend>Thank You For Registering!</legend>\r\n" + 
+								"                        <div class=\"form-group\">\r\n" + 
+								"                            <p>Please verify your email address before logging in.</p>\r\n" + 
+								"                        </div>\r\n" + 
+								"                    </fieldset>    \r\n" + 
+								"                </form>");
 					}
 				}
 			

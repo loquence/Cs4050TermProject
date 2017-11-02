@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+ 			<form id="signupFrm" method="POST" action="BookstoreServlet">
+                    <fieldset>
+                        <legend>User Info</legend>
+                        <div class="input-group form-group">
+                            <label for="fname">Name</label>
+                            <input type="text" class="form-control" name="fname"id="fname" required>
+                        </div>
+                        <div class="input-group form-group">
+                            <label for="lname">Surname</label>
+                            <input type="text" class="form-control" name="lname"id="lname" required>
+                        </div>
+                        <label for="email">Email</label>
+                        <div class="input-group form-group" id="emailDiv">
+                            <input type="email" class="form-control" name="email" id="email" required>
+                        </div>
+                        <div id="toGoEmail">
+                        </div>
+                        <label for="pwd">Password</label>
+                        <div class="input-group form-group pwds" id="pwds1">
+                            <input type="password"class="form-control " name="pwd" id="pwd" required>
+                        </div>
+                        <div id="toGoPwd">
+                        </div>
+                        <label for="pwd2">Confirm Password</label>
+                        <div class="input-group form-group pwds" id="pwds2">
+                        	<input type="password"class="form-control" name="pwd2" id="pwd2" data-toggle="tooltip"  required>
+                        </div>
+                        <div id="toGo">
+                        </div>
+                        <p></p>
+                        <input type="hidden" name="page" value="signup">
+                        <button type="submit" class="btn btn-default butt">Create Your Account</button>
+                    </fieldset>    
+                  </form>
+</html>
