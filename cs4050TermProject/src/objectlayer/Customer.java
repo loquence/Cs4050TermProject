@@ -1,5 +1,9 @@
 package objectlayer;
-
+/**
+ * Customer class implementation
+ * @author Ryan
+ *
+ */
 public class Customer extends User {
 	private static String type = "customer";
 	private String address;

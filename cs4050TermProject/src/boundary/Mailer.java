@@ -15,28 +15,33 @@ import java.util.logging.Logger;
 @Stateless
 public class Mailer {
 	
-	//@Resource(lookup="java:jboss/mail/gmail")
+	//Server session object
 	private Session session;
 	
-	public int send(String to, String subject, String msg) throws NamingException {
-		
-		
-		
+	/**
+	 * tries to send mail to the 'to' email
+	 * @param to
+	 * @param subject
+	 * @param msg
+	 * @return
+	 * @throws NamingException
+	 */
+	public int send(String to, String subject, String msg) throws NamingException {	
 		try {
-			InitialContext ic = new InitialContext();
-			session = (Session) ic.lookup("java:jboss/mail/gmail");
-            Message message = new MimeMessage(session);
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
-            message.setSubject(subject);
-            message.setContent(msg,"text/html");
+			InitialContext ic = new InitialContext();//InitialContext object
+			session = (Session) ic.lookup("java:jboss/mail/gmail");//lookup on java:jboss/mail/gmail jndi on the server standalone.xml
+            Message message = new MimeMessage(session);//creates message
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));//set the recipients
+            message.setSubject(subject);//sets the subject
+            message.setContent(msg,"text/html");//sets the content
  
-            Transport.send(message);
+            Transport.send(message);//sends message
  
         } catch (MessagingException e) {
-            Logger.getLogger(Mailer.class.getName()).log(Level.WARNING, "Cannot send mail", e);
-            return -1;
+            Logger.getLogger(Mailer.class.getName()).log(Level.WARNING, "Cannot send mail", e);//logs error
+            return -1;//returns -1 on failure
         }
-		return 0;
+		return 0;//returns 0 on success
 		
 	}
 	

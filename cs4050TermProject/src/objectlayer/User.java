@@ -1,5 +1,10 @@
 package objectlayer;
 import persistlayer.BookstorePersistImpl;
+/**
+ * User class implenentation
+ * @author Ryan
+ *
+ */
 public class User {
 	private String fname;
 	private String lname;
@@ -44,4 +49,6 @@ public class User {
 	public User checkEmail() {
 		return bookstorePersist.checkEmail(this.email);
 	}
+	
+	
 }
