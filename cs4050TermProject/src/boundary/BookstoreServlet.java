@@ -38,7 +38,7 @@ import javax.activation.*;
 @WebServlet("/BookstoreServlet")
 public class BookstoreServlet extends HttpServlet {
 	/**
-	 * serialVersionUID: Default version for the template processor
+	 * serialVersionUID: Default version for the servlet, created on servlet creation
 	 * unVerified: default value for an unverified user
 	 * verified: default value for a verified user
 	 * 
