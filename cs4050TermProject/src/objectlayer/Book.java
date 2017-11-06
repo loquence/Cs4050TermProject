@@ -100,10 +100,10 @@ public class Book {
 		this.rating = rating;
 	}
 	
-	public ImageView getCover() {
+	public String getCover() {
 		return cover;
 	}
-	public void setCover(ImageView cover) {
+	public void setCover(String cover) {
 		this.cover = cover;
 	}
 	
