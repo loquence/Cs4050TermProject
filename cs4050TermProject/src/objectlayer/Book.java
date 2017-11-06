@@ -11,9 +11,10 @@ public class Book {
 	private int edition;
 	private String publisher;
 	private int publicationYear;
+	private int threshold;
 	private int quantity;
 	private int rating;
-	private ImageView cover;	//Image I/O instead?
+	private String cover;	//Should be path to where images are stored
 	private int sellingPrice;
 	private int buyingPrice;
 	private int minThreshold;
