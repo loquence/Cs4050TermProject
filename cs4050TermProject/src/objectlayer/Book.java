@@ -20,7 +20,7 @@ public class Book {
 	private int minThreshold;
 	
 	public Book(int iSBN, String title, String genre, String author, int edition, String publisher, int publicationYear,
-			int quantity, int rating, ImageView cover, int sellingPrice, int buyingPrice, int minThreshold) {
+			int quantity, int rating, String cover, int sellingPrice, int buyingPrice, int minThreshold) {
 		ISBN = iSBN;
 		this.title = title;
 		this.genre = genre;
