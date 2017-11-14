@@ -3,8 +3,11 @@ Team 3's CS 4050 Group project
 
 Includes the full web page files in the cs4050TermProject folder, along with the edited server xml files which allow remote access along with mail.
 
-Admin can edit book information 
+Admin can edit book information
+
+
 Admin can enter supplier and shipment info (name, address, phone number, contact person info (name, email, phone #)
+
 Admin can add or delete new employees, update members
 Admin can add promotions
 promotions can be emailed
