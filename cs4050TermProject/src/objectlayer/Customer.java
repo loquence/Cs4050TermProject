@@ -1,21 +1,27 @@
 package objectlayer;
+
+import persistlayer.BookstorePersistImpl;
+
 /**
  * Customer class implementation
  * @author Ryan
  *
  */
 public class Customer extends User {
-	private static String type = "customer";
+	
+	private static UserType type = UserType.CUSTOMER;
 	private String address;
 	private String number;
-	private int verified;
-	public Customer(String fname, String lname, String email, String pwd, int verified) {
+	private Status status;
+	
+	public Customer(String fname, String lname, String email, String pwd, Status status) {
 		super(fname, lname, email, pwd);
-		this.verified = verified;
+		this.status = status;
+		
 		// TODO Auto-generated constructor stub
 	}
 	
-	public String getType() {
+	public UserType getType() {
 		return type;
 	}
 
@@ -35,12 +41,19 @@ public class Customer extends User {
 		this.number = number;
 	}
 
-	public int getVerified() {
-		return verified;
+	public Status getStatus() {
+		return status;
 	}
 
-	public void setVerified(int verified) {
-		this.verified = verified;
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
+	public int createUser() {
+		return getPersist().addUser(this);
+	}
+	public int addCode(String code) {
+		return getPersist().addCode(this,code);
 	}
 
 	

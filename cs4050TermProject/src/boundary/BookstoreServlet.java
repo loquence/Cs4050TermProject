@@ -38,7 +38,7 @@ import javax.activation.*;
 @WebServlet("/BookstoreServlet")
 public class BookstoreServlet extends HttpServlet {
 	/**
-	 * serialVersionUID: Default version for the servlet, created on servlet creation
+	 * serialVersionUID: Default version for the template processor
 	 * unVerified: default value for an unverified user
 	 * verified: default value for a verified user
 	 * 
@@ -122,18 +122,20 @@ public class BookstoreServlet extends HttpServlet {
 		SimpleHash root = new SimpleHash(db.build());//the hashmap
 		root.put("name", page);//putting name into the hashmap, currently not in use
 		HttpSession session = request.getSession(false);//getting the current session on startup
+		RandomStringGen rg = new RandomStringGen();
 		/*
 		 * logicImplementation object from the logicImplementation class
 		 * May not be used in future versions of this project as the persistLayer
 		 * is going to be accessed from the Object Layer instead of the Logic Layer
 		 */
-		BookstoreLogicImpl bookstoreLogic = new BookstoreLogicImpl();
+		BookstoreLogicImpl bookstoreLogicImpl = new BookstoreLogicImpl();
 		
 		/*
 		 * Checks if page who sent post request is the signup page
 		 * Currently this form is being handled by an ajax call.
 		 */
 		if (page.equals("signup")) {
+			
 			/*
 			 * If signup sent the post request,
 			 * gathers all the parameter values 
@@ -144,20 +146,15 @@ public class BookstoreServlet extends HttpServlet {
 			String email = request.getParameter("email");
 			String pwd = request.getParameter("pwd");
 			//Creates a new customer based off those values, sets its verified value to unVerified
-			Customer u = new Customer(fname,lname,email,pwd,unVerified);
-			
+			Customer u = new Customer(fname,lname,email,pwd,Status.UNVERIFIED);
+			Mailer ml = new Mailer();//creates Mailer object
 			//Gets current session object
 			session=request.getSession();
 			//Synchronizes and puts the email and if the user is logged in or not(
 			synchronized(session) {
 				session.setAttribute("email", u.getEmail());
-				session.setAttribute("logged", u.getVerified() );
+				
 			}
-			
-			
-			
-			
-			Mailer ml = new Mailer();//creates Mailer object
 			/*
 			 * Calls checkMail on the customer, to verify if the email is available.
 			 * This has been implemented in ajax and may not be needed in the future.
@@ -174,31 +171,46 @@ public class BookstoreServlet extends HttpServlet {
 			//Else the email is not in database, and is available
 			else {
 				int check = 0;
-			
-				try {
-					/*
-					 * Calls send(email,subject,msg) which tries to send
-					 * a mail to email with subject and msg. Catches namingexception
-					 * and sets response to what send returns
-					 */
-					check = ml.send(u.getEmail(),"test","test");
-				} catch (NamingException e) {
-					// TODO Auto-generated catch block
+				int test = u.createUser();
+				if (test== -1) {
+					root.put("database", true);
+					processor.processTemplate("signup.html", root, request, response);
+				}
+				else {
+					try {
+						/*
+						 * Calls send(email,subject,msg) which tries to send
+						 * a mail to email with subject and msg. Catches namingexception
+						 * and sets response to what send returns
+						 */
+						String rando = null;
+						int checkCode = -1;
+						while(checkCode==-1) {
+							rando=RandomStringGen.getString();
+							checkCode= bookstoreLogicImpl.checkCode(rando); 
+						}
+						
+						u.addCode(rando);
+						check = ml.send(u.getEmail(),"Verify your Email account!","Thank you for registering!\n Here is your account verification code: " + rando);
+					} catch (NamingException e) {
+					
 					e.printStackTrace();
 					check = -1;
-				}
-				/*
-				 * If send returns < 0, the email could not be sent
-				 * and the email is not valid. Output response to the user.
-				 * Output is not currently working. Instead of using the processor,
-				 * the future plan is to use response.write("failure") or something along those lines
-				 * to an ajax request which will then reload the signup form with
-				 * a message saying the email does not exist
-				 */
-				if (check < 0){
-					root.put("checkEmail", true);
-					processor.processTemplate("signup.html",root,request,response);
-				}
+					}
+					/*
+					 * If send returns < 0, the email could not be sent
+					 * and the email is not valid. Output response to the user.
+					 * Output is not currently working. Instead of using the processor,
+					 * the future plan is to use response.write("failure") or something along those lines
+					 * to an ajax request which will then reload the signup form with
+					 * a message saying the email does not exist
+					 */
+					if (check < 0){
+						
+						root.put("checkEmail", true);
+						processor.processTemplate("signup.html",root,request,response);
+						/*delete the added user here in future*/
+					}
 				/*
 				 * else, the email is valid and the mail is sent
 				 * 
@@ -211,37 +223,18 @@ public class BookstoreServlet extends HttpServlet {
 				 * Atm there shouldnt be any problem inputting to the database but this is just a failsafe.
 				 */
 				else {
-					int test = bookstoreLogic.createCustomer(u);
-					/*
-					 * If test == -1, then the creation failed, and signup must be reloaded.
-					 * This needs to be changed as signup.html does not exist anymore.
-					 * Should send response like bellow, with html that contains the form 
-					 * that was being used for sign up, which some simple changes to show the user
-					 * the problem
-					 */
-					if (test == -1) {
-						root.put("database", true);
-						processor.processTemplate("signup.html", root, request, response);
-					}
+					
 					/*
 					 * Sends this html response to the ajax method that sent this request.
 					 * 
 					 */
-					else {
-						response.setContentType("text/html");
-						response.getWriter().write("<form>\r\n" + 
-								"                    <fieldset>\r\n" + 
-								"                        <legend>Thank You For Registering!</legend>\r\n" + 
-								"                        <div class=\"form-group\">\r\n" + 
-								"                            <p>Please verify your email address before logging in.</p>\r\n" + 
-								"                        </div>\r\n" + 
-								"                    </fieldset>    \r\n" + 
-								"                </form>");
+						root.put("email", u.getEmail());
+						processor.processTemplate("verify.html", root, request, response);
 					}
 				}
+			}	
+		}
 			
-			}
-		} 
 		/*
 		 * Checks if the page that sent the request is signin
 		 * Need to implement ajax for the signin form as ajax
@@ -255,13 +248,19 @@ public class BookstoreServlet extends HttpServlet {
 			 */
 			String email = request.getParameter("email");
 			String pwd = request.getParameter("pwd");
-			User u = new User("","",email,pwd);
+			User u = new Customer("","",email,pwd,Status.VERIFIED);
 			int check = u.login();
-			if (check == 0) {
+			if (check > 0) {
+				root.put("user", "Test Case");
+				processor.processTemplate("homepage.html", root, request, response);
+			}
+			else {
 				
+				processor.processTemplate("../../signin.html", root, request, response);
 			}
 			
 		}
+		
 		/*
 		 * checks if profile submits a request
 		 * Currently nothing is implemented for the profile form
@@ -269,6 +268,22 @@ public class BookstoreServlet extends HttpServlet {
 		if (page.equals("profile")) {
 			template = "profile.html";
 			processor.processTemplate(template, root, request, response);
+		}
+		if (page.equals("verify")) {
+			String code = request.getParameter("code");
+			String email= request.getParameter("em");
+			int check = bookstoreLogicImpl.verifyCode(email ,code);
+			if(check == -1) {
+				response.setContentType("text/html");
+				response.getWriter().write(email + " "+ check);
+			}
+			else {
+				//remove code from code thing here
+				//update verified
+				//update session for logging in
+				//add cookie?? << not sure if that will work with freemarker template
+				processor.processTemplate("homepage.html", root, request, response);
+			}
 		}
 	}
 	
@@ -285,7 +300,7 @@ public class BookstoreServlet extends HttpServlet {
 		 * of test is null or not
 		 */
 		String email = request.getParameter("email");
-		User u = new User("","",email,"");
+		User u = new Customer("","",email,"",Status.VERIFIED);
 		User test = u.checkEmail();
 		Gson gson = new Gson();//gson object
 		response.setContentType("application/json");//set responseType to json

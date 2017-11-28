@@ -3,14 +3,15 @@
 	
         $(function(){
         	
-        	var originalModal = $("#signUpModal").clone();
+        	var emailDivClone = $("#emailDiv2").clone(); 
         	
-        	$(document).on('#signUpModal', 'hidden.bs.modal', function () {
-        		alert("it gets here");
-        	    $('#signUpModal').remove();
-        	    var myClone = originalModal.clone();
-        	    $('body').append(myClone);
-        	});
+        	$('#signUpModal').on('hide.bs.modal', function (e) {
+        		alert("its firing");
+        		 	$('#emailDiv2').remove();
+        		    var myClone = emailDivClone;
+        		    $('#emailDiv').append(myClone);
+        		    
+        	 });
         	
         	$('[data-toggle="tooltip"]').tooltip(); 
             var val = {name:"fillBooks"}
@@ -36,6 +37,9 @@
 						success:function(responseText){
 								$('#allInputs').empty();
 								$('#allInputs').append(responseText);
+								$('#signUpModal').remove();
+								var myClone = originalModal.clone();
+								$('body').append(myClone);
 								
 							},
 						error: function(data) {
@@ -49,7 +53,7 @@
                 });
             
         	
-        	$("#allInputs").on('keyup focusin focusout', function(){
+        	$("#allInputs").on('keyup focusin focusout', 'div', function(){
 					var ch = checks.every(isChecked);
 					if (ch){
 						$('.butt').prop('disabled',false);
@@ -115,12 +119,11 @@
 					}    
             });
             
-            $(".modal").on("hidden.bs.modal", function(e){
-                $(this).removeData();
-            });
+            
 
-            $("#emailDiv").on('focusin focusout keyup',function(){
-                var em = $("#email").val();
+            $("#emailDiv").on('focusin focusout keyup', ".emailDiv2", function(){
+                alert('firing');
+            	var em = $("#email").val();
             	var val = {name:"email", email:em}
             	if (!em.match(re)){
                 	if (document.getElementById('invalidEmail')){
@@ -130,7 +133,7 @@
                     	checks[0]=0;
                     	$('#checkMark').remove();
                     	if(!document.getElementById('xMark')){
-        					$('#emailDiv').append("<span id=\"xMark\" class=\"input-group-addon\"><span class=\"glyphicon glyphicon-remove\"</span></span>");
+        					$('#emailDiv2').append("<span id=\"xMark\" class=\"input-group-addon\"><span class=\"glyphicon glyphicon-remove\"</span></span>");
                     	}
     					$('#toGoEmail').append("<p id=\"invalidEmail\" style=\"color:red\">This email is not valid.</p>");
                 	}
@@ -148,7 +151,7 @@
                            		checks[0]=1;
                            		if(!document.getElementById('checkMark')){
                                		$('#xMark').remove();
-                               		$('#emailDiv').append("<span id =\"checkMark\" class=\"input-group-addon\"><span class=\"glyphicon glyphicon-ok\"</span></span>");
+                               		$('#emailDiv2').append("<span id =\"checkMark\" class=\"input-group-addon\"><span class=\"glyphicon glyphicon-ok\"</span></span>");
                                		$("#takenEmail").remove();
                        				}
                         	}else {
@@ -157,7 +160,7 @@
                             		$('#toGoEmail').append("<p id=\"takenEmail\" style=\"color:red\">This email is not taken.</p>");
                                 	$('#checkMark').remove();
                                 	if(!document.getElementById('xMark')){
-                        				$('#emailDiv').append("<span id=\"xMark\" class=\"input-group-addon\"><span class=\"glyphicon glyphicon-remove\"</span></span>");
+                        				$('#emailDiv2').append("<span id=\"xMark\" class=\"input-group-addon\"><span class=\"glyphicon glyphicon-remove\"</span></span>");
                                 	}
                                	}
                     	    }
