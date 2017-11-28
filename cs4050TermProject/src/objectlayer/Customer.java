@@ -9,19 +9,15 @@ import persistlayer.BookstorePersistImpl;
  */
 public class Customer extends User {
 	
-	private static UserType type = UserType.CUSTOMER;
+	
 	private String address;
 	private String number;
 	
 	public Customer(String fname, String lname, String email, String pwd, Status status) {
-		super(fname, lname, email, pwd, status);
+		super(fname, lname, email, pwd, status, UserType.CUSTOMER);
 		
 		
 		// TODO Auto-generated constructor stub
-	}
-	
-	public UserType getType() {
-		return type;
 	}
 
 	public String getAddress() {
