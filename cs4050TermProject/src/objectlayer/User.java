@@ -11,7 +11,8 @@ public class User {
 	private String email;
 	private String pwd;
 	private BookstorePersistImpl bookstorePersist;
-	public User (String fname, String lname, String email, String pwd) {
+	private Status status;
+	public User (String fname, String lname, String email, String pwd, Status status) {
 		this.fname = fname;
 		this.lname = lname;
 		this.email = email;
@@ -51,6 +52,14 @@ public class User {
 	
 	public User checkEmail() {
 		return bookstorePersist.checkEmail(this.email);
+	}
+	
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
 	}
 	/*
 	public int createUser() {		
