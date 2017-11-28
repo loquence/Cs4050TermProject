@@ -248,15 +248,16 @@ public class BookstoreServlet extends HttpServlet {
 			 */
 			String email = request.getParameter("email");
 			String pwd = request.getParameter("pwd");
-			User u = new Customer("","",email,pwd,Status.VERIFIED);
+			User u = new Customer("","",email,pwd,Status.UNVERIFIED);
 			int check = u.login();
-			if (check > 0) {
+			if (check > 0 && u.getStatus().equals(Status.VERIFIED)) {
 				root.put("user", "Test Case");
 				processor.processTemplate("homepage.html", root, request, response);
 			}
 			else {
-				
-				processor.processTemplate("../../signin.html", root, request, response);
+				response.setContentType("text/html");
+				response.getWriter().write("" + u.getStatus());
+				//processor.processTemplate("../../signin.html", root, request, response);
 			}
 			
 		}

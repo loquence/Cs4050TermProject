@@ -12,11 +12,10 @@ public class Customer extends User {
 	private static UserType type = UserType.CUSTOMER;
 	private String address;
 	private String number;
-	private Status status;
 	
 	public Customer(String fname, String lname, String email, String pwd, Status status) {
-		super(fname, lname, email, pwd);
-		this.status = status;
+		super(fname, lname, email, pwd, status);
+		
 		
 		// TODO Auto-generated constructor stub
 	}
@@ -39,14 +38,6 @@ public class Customer extends User {
 
 	public void setNumber(String number) {
 		this.number = number;
-	}
-
-	public Status getStatus() {
-		return status;
-	}
-
-	public void setStatus(Status status) {
-		this.status = status;
 	}
 
 	public int createUser() {
