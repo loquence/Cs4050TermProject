@@ -11,13 +11,22 @@ public class User {
 	private String email;
 	private String pwd;
 	private BookstorePersistImpl bookstorePersist;
+	private UserType type = UserType.CUSTOMER;
 	private Status status;
-	public User (String fname, String lname, String email, String pwd, Status status) {
+	public User (String fname, String lname, String email, String pwd, Status status, UserType type) {
 		this.fname = fname;
 		this.lname = lname;
 		this.email = email;
 		this.pwd = pwd;
+		this.status = status;
+		this.type= type;
 		bookstorePersist = new BookstorePersistImpl();
+	}
+	public UserType getType() {
+		return type;
+	}
+	public void setType(UserType type) {
+		this.type = type;
 	}
 	public String getFname() {
 		return fname;
@@ -60,6 +69,9 @@ public class User {
 
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+	public int verifyCode(String code) {
+		return bookstorePersist.verifyCode(this, code);
 	}
 	/*
 	public int createUser() {		

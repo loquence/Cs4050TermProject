@@ -47,8 +47,6 @@ public class BookstoreServlet extends HttpServlet {
 	 * templateDir: default template directory for the template processor to look for
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final int unVerified = 0;
-	private static final int verified = 1;
     private TemplateProcessor processor;
     private static String templateDir = "/WEB-INF/templates"; 
     
@@ -121,7 +119,7 @@ public class BookstoreServlet extends HttpServlet {
 		DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(processor.getCfg().getVersion());//object wrapper to be used for Freemarker Hashmap
 		SimpleHash root = new SimpleHash(db.build());//the hashmap
 		root.put("name", page);//putting name into the hashmap, currently not in use
-		HttpSession session = request.getSession(false);//getting the current session on startup
+		
 		RandomStringGen rg = new RandomStringGen();
 		/*
 		 * logicImplementation object from the logicImplementation class
@@ -148,13 +146,8 @@ public class BookstoreServlet extends HttpServlet {
 			//Creates a new customer based off those values, sets its verified value to unVerified
 			Customer u = new Customer(fname,lname,email,pwd,Status.UNVERIFIED);
 			Mailer ml = new Mailer();//creates Mailer object
-			//Gets current session object
-			session=request.getSession();
-			//Synchronizes and puts the email and if the user is logged in or not(
-			synchronized(session) {
-				session.setAttribute("email", u.getEmail());
-				
-			}
+			
+			
 			/*
 			 * Calls checkMail on the customer, to verify if the email is available.
 			 * This has been implemented in ajax and may not be needed in the future.
@@ -165,6 +158,7 @@ public class BookstoreServlet extends HttpServlet {
 				//Extra check just incase, for some reason, it gave back the wrongemail
 				if (checkEmail.getEmail().equals(email)) {
 					root.put("emailExists", true);
+					template ="../../signup.html";
 					processor.processTemplate("../../signup.html", root, request, response);
 				}
 			}
@@ -229,6 +223,7 @@ public class BookstoreServlet extends HttpServlet {
 					 * 
 					 */
 						root.put("email", u.getEmail());
+						template="verify.html";
 						processor.processTemplate("verify.html", root, request, response);
 					}
 				}
@@ -248,17 +243,35 @@ public class BookstoreServlet extends HttpServlet {
 			 */
 			String email = request.getParameter("email");
 			String pwd = request.getParameter("pwd");
-			User u = new Customer("","",email,pwd,Status.UNVERIFIED);
+			User u = new User("","",email,pwd,Status.UNVERIFIED,UserType.CUSTOMER);
+			HttpSession session = request.getSession(false);//getting the current session on startup
+			session.setMaxInactiveInterval(1800);
 			int check = u.login();
 			if (check > 0 && u.getStatus().equals(Status.VERIFIED)) {
-				root.put("user", "Test Case");
-				processor.processTemplate("homepage.html", root, request, response);
+				root.put("user", u.getFname());
+				root.put("type", u.getType());
+				template="homepage.html";
+				
+				synchronized(session) {
+					session.setAttribute("email", u.getEmail());
+					session.setAttribute("fname", u.getFname());
+					session.setAttribute("lname", u.getLname());
+					session.setAttribute("type", u.getType());
+				}
+				
+				
+			}
+			else if (!u.getStatus().equals(Status.VERIFIED)) {
+				template="verify.html";
+				//processor.processTemplate(template, root, request, response);
 			}
 			else {
 				response.setContentType("text/html");
 				response.getWriter().write("" + u.getStatus());
 				//processor.processTemplate("../../signin.html", root, request, response);
 			}
+			
+			processor.processTemplate(template, root, request, response);
 			
 		}
 		
@@ -273,8 +286,10 @@ public class BookstoreServlet extends HttpServlet {
 		if (page.equals("verify")) {
 			String code = request.getParameter("code");
 			String email= request.getParameter("em");
-			int check = bookstoreLogicImpl.verifyCode(email ,code);
+			User u = new User("","",email,"",Status.VERIFIED, UserType.CUSTOMER);
+			int check = u.verifyCode(code);
 			if(check == -1) {
+				
 				response.setContentType("text/html");
 				response.getWriter().write(email + " "+ check);
 			}
@@ -283,6 +298,8 @@ public class BookstoreServlet extends HttpServlet {
 				//update verified
 				//update session for logging in
 				//add cookie?? << not sure if that will work with freemarker template
+				HttpSession session = request.getSession(false);//getting the current session on startup
+				session.setMaxInactiveInterval(1800);
 				processor.processTemplate("homepage.html", root, request, response);
 			}
 		}

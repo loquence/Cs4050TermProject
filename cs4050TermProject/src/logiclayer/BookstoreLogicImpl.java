@@ -21,9 +21,11 @@ public class BookstoreLogicImpl {
 		return bookstorePersist.checkCode(code);
 	}
 	
-	public int verifyCode(String email, String code) {
-		return bookstorePersist.verifyCode(email, code);
-	}
+	
+	
+	/*public int updateVerification(Status status, String email){
+		return bookstorePersist.updateVerification(status, email);
+	}*/
 	
 	
 	

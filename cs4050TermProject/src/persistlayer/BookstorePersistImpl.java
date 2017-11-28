@@ -65,13 +65,34 @@ public class BookstorePersistImpl {
 		return 1;
 	}
 	
-	public int verifyCode(String email, String code) {
-		String sql = "SELECT * FROM user_verification_code WHERE email=\'" + email + "\';";
+	public int verifyCode(User u, String code) {
+		String checkCode = "SELECT * FROM user_verification_code WHERE email=\'" + u.getEmail() + "\';";
+		String update = "UPDATE users SET status='" + u.getStatus() + "' WHERE email='" + u.getEmail() +  "';";
+		String delete = "DELETE from user_verification_code WHERE email='" + u.getEmail() + "';";
+		String sql = "SELECT * FROM users WHERE email=\"" + u.getEmail() + "\";";
+		String f = DbAccessImpl.getString(sql,"fname");
+		String l = DbAccessImpl.getString(sql, "lname");
+		String c = DbAccessImpl.getString(checkCode,"code");
+		UserType t = UserType.valueOf(DbAccessImpl.getString(sql, "type"));
 		
-		String p = DbAccessImpl.getString(sql,"code");
-		if(p != null) {
-			return 1;
+		if(c != null) {
+			if(c.equals(code)) {
+				DbAccessImpl.update(update);
+				DbAccessImpl.update(delete);
+				u.setFname(f);
+				u.setLname(l);
+				u.setStatus(Status.VERIFIED);
+				u.setType(t);
+				return 1;
+			}
+			else {
+				u.setStatus(Status.UNVERIFIED);	
+			}
 		}
+		
 		return -1;
 	}
+	
+	
+	
 }
