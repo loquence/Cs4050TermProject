@@ -27,7 +27,6 @@
 						success:function(responseText){
 								$('body').load(responseText);
 							}
-
 						})
                 });
             
@@ -39,7 +38,6 @@
 						}
 					else {
 						$("button[type=submit]").attr('disabled',"disabled");
-
 						}
 					
             	});
@@ -53,17 +51,14 @@
 				if(pwd.length > 7){
 					checks[1]=1;
 					if(document.getElementById('validPWD1')){
-
 						}
 					else{
 						$("#shortPWD").remove();
 						$('#pwds1').append("<span id=\"validPWD1\"class=\"input-group-addon checkMarkPwd\"><span class=\"glyphicon glyphicon-ok\"</span></span>");
-
 					}
                 	if (pwd !== pwd2){
                     	checks[2]=0;
                     	if (document.getElementById('invalidPWD')){
-
                     	}else {
                     		$('#checkMarkPwd').remove();
                     		$('#pwds2').append("<span id=\"xMarkPwd\"class=\"input-group-addon xMarkPwd\"><span class=\"glyphicon glyphicon-remove\"</span></span>");
@@ -74,7 +69,6 @@
                 	else {
                     	checks[2]=1;
                     	if (document.getElementById('checkMarkPwd')){
-
                         }else {
 							$('#invalidPWD').remove();
 							$('#xMarkPwd').remove();
@@ -86,7 +80,6 @@
 				else {
 					checks[1]=0;
 					if (document.getElementById('shortPWD')){
-
 						}
 					else {
 						$("#validPWD1").remove();
@@ -94,16 +87,13 @@
 						
 						
 					}
-
 					}    
             });
-
             $("#emailDiv").on('focusin focusout keyup',function(){
                 var em = $("#email").val();
             	var val = {name:"email", email:em}
             	if (!em.match(re)){
                 	if (document.getElementById('invalidEmail')){
-
                     	}
                 	else {
                     	checks[0]=0;
@@ -144,13 +134,11 @@
                     	error: function(data) {
 								console.log('An error occured.');
 								console.log(data);
-
                         	}
                     
                 	})
             	}
             });
-
             
     	});
     </script>

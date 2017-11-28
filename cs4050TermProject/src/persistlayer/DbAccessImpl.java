@@ -20,7 +20,7 @@ public class DbAccessImpl {
 	 * connection 
 	 * @return
 	 */
-	public static Connection connect() {
+	protected static Connection connect() {
 		Connection con = null;
 		try {
 			Class.forName(DbAccessConfiguration.DRIVE_NAME);
@@ -37,7 +37,7 @@ public class DbAccessImpl {
 	 * @param query
 	 * @return
 	 */
-	public static ResultSet retrieve (String query, Connection con) {
+	protected static ResultSet retrieve (String query, Connection con) {
 		ResultSet rset = null;
 		try {
 			Statement stmt = con.createStatement();
@@ -53,7 +53,7 @@ public class DbAccessImpl {
 	 * @param sql
 	 * @return
 	 */
-	public static int create(String sql) {
+	protected static int create(String sql) {
 		Connection c = connect();
 		int r = 0;
 		try {
@@ -71,7 +71,7 @@ public class DbAccessImpl {
 	 * @param sql
 	 * @return
 	 */
-	public static int update(String sql){
+	protected static int update(String sql){
 		Connection c = connect();
 		int r = 0;
 		try {
@@ -89,7 +89,7 @@ public class DbAccessImpl {
 	 * @param sql
 	 * @return
 	 */
-	public static int delete(String sql){
+	protected static int delete(String sql){
 		Connection c = connect();
 		int r = 0;
 		try {
@@ -106,7 +106,7 @@ public class DbAccessImpl {
 	 * disconnects from a connection
 	 * @param con
 	 */
-	public static void disconnect(Connection con) {
+	protected static void disconnect(Connection con) {
 		try {
 			if (con != null) {
 				con.close();
@@ -116,7 +116,7 @@ public class DbAccessImpl {
 		}
 	} // end of closeConnection
 	
-	public static String getString(String sql, String toget) {
+	protected static String getString(String sql, String toget) {
 		Connection con = connect();
 		ResultSet rs = retrieve(sql,con);
 		String r = null;
@@ -131,7 +131,7 @@ public class DbAccessImpl {
 		return r;	
 	}
 	
-	public static int getInt(String sql, String toget){
+	protected static int getInt(String sql, String toget){
 		Connection c = connect();
 		ResultSet rs = retrieve(sql, c);
 		int r = 0;
@@ -146,7 +146,7 @@ public class DbAccessImpl {
 		return r;	
 	}
 	
-	public static SimpleSequence getSequence(String sql, DefaultObjectWrapperBuilder db){
+	protected static SimpleSequence getSequence(String sql, DefaultObjectWrapperBuilder db){
 		Connection c = connect();
 		ResultSet rs = retrieve(sql, c);
 		SimpleSequence sq = new SimpleSequence(db.build());

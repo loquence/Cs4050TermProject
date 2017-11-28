@@ -21,6 +21,7 @@ public class Book {
 	
 	public Book(int iSBN, String title, String genre, String author, int edition, String publisher, int publicationYear,
 			int quantity, int rating, String cover, int sellingPrice, int buyingPrice, int minThreshold) {
+		super();
 		ISBN = iSBN;
 		this.title = title;
 		this.genre = genre;

@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+    <link href="../CSS/style.css" type="text/css" rel="stylesheet"/>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="script.js"></script>
+       
+    <title>User Profile</title>
+    <link rel="shortcut icon" type="image/png" href="http://weknowyourdreams.com/images/book/book-08.jpg"/>
+    </head>
+    <body>
+        <form method="POST" action="BookstoreServlet">
+            <fieldset>
+                <legend>Thank you for Registering!</legend>
+                <div class="form-group">
+                    <label for="code">Please input the verification code sent to your email:</label>
+                    <input type="text" id="code" name="code" required>
+                    <button type="submit" class="btn btn-default">Verify</button>
+                    <input type="hidden" name="page" value="verify">
+                    <input type="hidden" name="em" value="${email?html}">
+                </div>
+            </fieldset>
+        </form>
+    </body>
+</html>

@@ -45,10 +45,17 @@ public class User {
 	public int login() {
 		return bookstorePersist.login(this);
 	}
+	public BookstorePersistImpl getPersist() {
+		return bookstorePersist;
+	}
 	
 	public User checkEmail() {
 		return bookstorePersist.checkEmail(this.email);
 	}
-	
+	/*
+	public int createUser() {		
+		return bookstorePersist.addUser(this);
+	}
+	*/
 	
 }
