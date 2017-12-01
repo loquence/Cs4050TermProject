@@ -1,5 +1,6 @@
-
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
     <head>
     <meta charset="utf-8">
@@ -82,94 +83,15 @@
                         
                     </div>
         	</div>
+        <div>
         
         
-        
-
-<!-- Modal -->
-		<div id="signUpModal" class="modal fade" role="dialog">
-  			<div class="modal-dialog" id="modalInner">
-            <!-- Modal content-->
-   	            <div class="modal-content">
-      			   <div class="modal-header">
-        			 <button type="button" class="close" data-dismiss="modal">&times;</button>
-        			 <h4 class="modal-title">Sign Up</h4>
-      			   </div>
-      		    <div class="modal-body" id="allInputs">
-        		  <form id="signupFrm" method="POST" action="BookstoreServlet">
-                    <fieldset>
-                        <legend>User Info</legend>
-                        <div class="input-group form-group">
-                            <label for="fname">Name</label>
-                            <input type="text" class="form-control" name="fname"id="fname" required>
-                        </div>
-                        <div class="input-group form-group">
-                            <label for="lname">Surname</label>
-                            <input type="text" class="form-control" name="lname"id="lname" required>
-                        </div>
-                        <label for="email">Email</label>
-                        <div  id="emailDiv">
-                        	<div id="emailDiv2" class="input-group form-group emailDiv2">
-                            <input type="email" class="form-control" name="email" id="email" required>
-                            </div>
-                        </div>
-                        <div id="toGoEmail">
-                        </div>
-                        <label for="pwd">Password</label>
-                        <div class="input-group form-group pwds" id="pwds1">
-                            <input type="password"class="form-control " name="pwd" id="pwd" required>
-                        </div>
-                        <div id="toGoPwd">
-                        </div>
-                        <label for="pwd2">Confirm Password</label>
-                        <div class="input-group form-group pwds" id="pwds2">
-                        	<input type="password"class="form-control" name="pwd2" id="pwd2" data-toggle="tooltip"  required>
-                        </div>
-                        <div id="toGo">
-                        </div>
-                        <p></p>
-                        <input type="hidden" name="page" value="signup">
-                        <button type="submit" class="btn btn-default butt">Create Your Account</button>
-                    </fieldset>    
-                  </form>
-                </div>
-    	       </div>
-	       </div>
+        	
         </div>
         
-        <div id="signInModal" class="modal fade" role="dialog">
-  			<div class="modal-dialog">
-
-    		<!-- Modal content-->
-   			 <div class="modal-content">
-      			<div class="modal-header">
-        			<button type="button" class="close" data-dismiss="modal">&times;</button>
-        			<h4 class="modal-title">Sign In</h4>
-      			</div>
-      		<div class="modal-body">
-        		<form action="BookstoreServlet" method="post">
-                <fieldset>
-                    <legend>Login Info</legend>    
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" class="form-control" id="email" required>
-                    </div>
-                    <div class="form group">
-                        <label for="pwd">Password</label>
-                        <input type="password"class="form-control" id="pwd" required>
-                    </div>
-                    <p></p>
-                    <button type="submit" class="btn btn-default">Sign In</button>
-                    <input type="hidden" name="page" value="signin">
-                </fieldset>    
-            </form>
-               
-            </div>
-      		
-    	       </div>
-            </div>
-        </div>     
         
+
+
                        
     </body>
-</html>	
+</html>

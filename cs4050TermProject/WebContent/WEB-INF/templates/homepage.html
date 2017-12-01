@@ -44,14 +44,22 @@
                             </div>    
                         </div>
                         
-                    </div>
+                </div>
+                <#if type == "ADMIN">
+                <div class="col-md-3 col-md-offset-6"  style="background:lightgray">
+                    <p><button type="button" class="btn btn-default">Manage Users</button></p>
+                    <form action="BookstoreServlet" method="POST">
+                    	<p><button type="submit" class="btn btn-default">Edit Books</button></p>
+                    	<input type="hidden" name="page" value="editBooks">
+                    </form>
+					<p><button type="button" class="btn btn-default">Edit Promotions</button></p>   
+                    <form method="POST" action="BookstoreServlet">
+                    	<p><button type="submit" class="btn btn-default">Add Book</button></p>
+                    	<input type="hidden" name="page" value="addBook">
+                    </form>  
+                </div>
+                </#if>
         </div>
         
-        
-
-<!-- Modal -->
-		   
-    
-    
-    
     </body>
+</html>

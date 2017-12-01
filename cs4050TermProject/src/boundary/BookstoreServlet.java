@@ -75,34 +75,15 @@ public class BookstoreServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 * Processes get requests
 	 */
+    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//Gets the name parameter and stores it in page
 		String page = request.getParameter("name");
 		
+		response.setContentType("text/html;charset=UTF-8");
+
+ 
 		
-		/*
-		 * If statement checking if the name of the page is fillBooks.
-		 * if it is fill books, sends data back to the page.
-		 * This is used on the index/homepage that is first accessed when accessing
-		 * the online bookstore. Eventually it should send json objects of an array of books
-		 * which will be then processed by the javascript function client side and 
-		 * ordered on the web page
-		 */
-		if (page.equals("fillBooks")) {
-			response.setContentType("text/html");
-			response.getWriter().write("noot noot");
-		}
-		/**
-		 * If statement checking if the page name is email.
-		 * if it is, calls the check email function. Used to
-		 * check if the email inputed is already taken in the database
-		 * as emails must be unique.
-		 * @see checkEmail()
-		 */
-		if(page.equals("email")) {
-			checkEmail(request,response);
-			
-		}
 	}
 
 	/**
@@ -127,7 +108,13 @@ public class BookstoreServlet extends HttpServlet {
 		 * is going to be accessed from the Object Layer instead of the Logic Layer
 		 */
 		BookstoreLogicImpl bookstoreLogicImpl = new BookstoreLogicImpl();
+		if(page.equals("email")) {
+			checkEmail(request,response);
+		}
 		
+		if(page.equals("index")) {
+			processor.processTemplate("index.html", root, request, response);
+		}
 		/*
 		 * Checks if page who sent post request is the signup page
 		 * Currently this form is being handled by an ajax call.
@@ -244,13 +231,13 @@ public class BookstoreServlet extends HttpServlet {
 			String email = request.getParameter("email");
 			String pwd = request.getParameter("pwd");
 			User u = new User("","",email,pwd,Status.UNVERIFIED,UserType.CUSTOMER);
-			HttpSession session = request.getSession(false);//getting the current session on startup
+			HttpSession session = request.getSession(true);//getting the current session on startup
 			session.setMaxInactiveInterval(1800);
 			int check = u.login();
 			if (check > 0 && u.getStatus().equals(Status.VERIFIED)) {
 				root.put("user", u.getFname());
 				root.put("type", u.getType());
-				template="homepage.html";
+				
 				
 				synchronized(session) {
 					session.setAttribute("email", u.getEmail());
@@ -258,6 +245,7 @@ public class BookstoreServlet extends HttpServlet {
 					session.setAttribute("lname", u.getLname());
 					session.setAttribute("type", u.getType());
 				}
+				processor.processTemplate("homepage.html", root, request, response);
 				
 				
 			}
@@ -271,18 +259,10 @@ public class BookstoreServlet extends HttpServlet {
 				//processor.processTemplate("../../signin.html", root, request, response);
 			}
 			
-			processor.processTemplate(template, root, request, response);
+			
 			
 		}
 		
-		/*
-		 * checks if profile submits a request
-		 * Currently nothing is implemented for the profile form
-		 */
-		if (page.equals("profile")) {
-			template = "profile.html";
-			processor.processTemplate(template, root, request, response);
-		}
 		if (page.equals("verify")) {
 			String code = request.getParameter("code");
 			String email= request.getParameter("em");
@@ -298,10 +278,42 @@ public class BookstoreServlet extends HttpServlet {
 				//update verified
 				//update session for logging in
 				//add cookie?? << not sure if that will work with freemarker template
-				HttpSession session = request.getSession(false);//getting the current session on startup
+				HttpSession session = request.getSession(true);//getting the current session on startup
 				session.setMaxInactiveInterval(1800);
 				processor.processTemplate("homepage.html", root, request, response);
 			}
+		}
+		
+		/*
+		 * Everything after here is once a user is already logged in.
+		 * The if statements checks if the session still exists, and if it doesnt
+		 * redirects to the index page
+		 */
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			/*
+			 * checks if profile submits a request
+			 * Currently nothing is implemented for the profile form
+			 */
+			if (page.equals("profile")) {
+				template = "profile.html";
+				processor.processTemplate(template, root, request, response);
+				
+			}
+			if(session.getAttribute("type").equals(UserType.ADMIN)) {
+				root.put("user", session.getAttribute("fname"));
+				if (page.equals("addBook")) {
+					
+					template="addBook.html";
+					processor.processTemplate(template, root, request, response);
+				}
+				if (page.equals("editBooks")) {
+					template="editBook.html";
+					processor.processTemplate(template, root, request, response);
+				}
+				
+			}
+			
 		}
 	}
 	

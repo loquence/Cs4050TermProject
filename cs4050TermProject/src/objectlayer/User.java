@@ -11,7 +11,7 @@ public class User {
 	private String email;
 	private String pwd;
 	private BookstorePersistImpl bookstorePersist;
-	private UserType type = UserType.CUSTOMER;
+	private UserType type;
 	private Status status;
 	public User (String fname, String lname, String email, String pwd, Status status, UserType type) {
 		this.fname = fname;
