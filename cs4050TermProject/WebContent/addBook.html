@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+    <link href="style.css" type="text/css" rel="stylesheet"/>
+    
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <title>Add Book</title>
+    <link rel="shortcut icon" type="image/png" href="http://weknowyourdreams.com/images/book/book-08.jpg"/>    
+    </head>
+    <body>
+        <div class="container">
+            <div class="col-md-6 col-md-offset-3" id="allInputs">
+                <form id="addBook"action="BookstoreServlet" method="post">
+                    <fieldset>
+                        <legend>Book Info</legend>
+                        <div class="input-group form-group">
+                            <label for="title">Title</label>
+                            <input type="text" class="form-control" name="title"id="title" required>
+                        </div>
+						<div class="input-group form-group">
+                            <label for="title">ISBN</label>
+                            <input type="number" class="form-control" name="isbn"id="isbn" required>
+                        </div>
+                        <div class="input-group form-group">
+                            <label for="author">Author</label>
+                            <input type="text" class="form-control" name="author"id="author" required>
+                        </div>
+						<div class="input-group form-group">
+							<label for="publisher">Publisher</label>
+                            <input type="text" class="form-control" name="publisher" id="publisher" required>
+                        </div>
+						<div class="input-group form-group">
+							<label for="pubYear">Publication Year</label>
+                            <input type="number"class="form-control " name="pubYear" id="pubYear" required>
+                        </div>
+						<div class="input-group form-group">
+							<label for="edition">Book Edition</label>
+                        	<input type="number"class="form-control" name="edition" id="edition" required>
+                        </div>
+						<div class="input-group form-group">
+							<label for="genre">Genre</label>
+                        	<input type="text"class="form-control" name="genre" id="genre" required>
+                        </div>
+						<div class="input-group form-group">
+							<label for="buyPrice">Buying Price</label>
+                        	<input type="number" min="0" step=".01" class="form-control" name="buyPrice" id="buyPrice" required>
+                        </div>
+						<div class="input-group form-group">
+							<label for="sellPrice">Selling Price</label>
+                        	<input type="number" min="0" step=".01" class="form-control" name="sellPrice" id="sellPrice" required>
+                        </div>
+						<div class="input-group form-group">
+							<label for="min">Minimum Theshold</label>
+                        	<input type="number"class="form-control" name="min" id="min" required>
+                        </div>
+						<div class="input-group form-group">
+							<label for="cover">Book Cover Path</label>
+                        	<input type="text"class="form-control" name="cover" id="cover" required>
+                        </div>
+						<script> renderImage ({ var image = new ig.AnimationSheet(cover, 15, 15) }); </script> 
+						
+                        <p></p>
+                        <input type="hidden" name="page" value="addBook">
+                        <button type="submit" class="btn btn-default" id="addBookA" >Add Book to Inventory</button>
+                    </fieldset>    
+                </form>
+            </div>    
+        </div>
+    </body>
+</html>
