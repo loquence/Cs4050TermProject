@@ -63,12 +63,22 @@
 							<label for="min">Minimum Theshold</label>
                         	<input type="number"class="form-control" name="min" id="min" required>
                         </div>
-						<div class="input-group form-group">
-							<label for="cover">Book Cover Path</label>
-                        	<input type="text"class="form-control" name="cover" id="cover" required>
-                        </div>
-						<script> renderImage ({ var image = new ig.AnimationSheet(cover, 15, 15) }); </script> 
-						
+			<script> 
+				function displayImage() {
+					var file = document.getElementById('cover').files[0];
+					var reader = new FileReader();
+					reader.onload = function(e) {
+						var image = document.createElement("cvr");
+						image.src = e.target.result;
+						document.body.appendChild(image);
+					}
+					reader.readAsDataURL(file);
+				}
+			</script> 
+			<div class="input-group form-group">
+				<label for="cover">Book Cover</label>
+                        	<input type="file"class="form-control" name="cover" id="cover" required>
+                        </div>			
                         <p></p>
                         <input type="hidden" name="page" value="addBook">
                         <button type="submit" class="btn btn-default" id="addBookA" >Add Book to Inventory</button>
