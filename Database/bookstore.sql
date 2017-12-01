@@ -16,21 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Temporary view structure for view `admin`
---
-
-DROP TABLE IF EXISTS `admin`;
-/*!50001 DROP VIEW IF EXISTS `admin`*/;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE VIEW `admin` AS SELECT 
- 1 AS `id`,
- 1 AS `name`,
- 1 AS `email`,
- 1 AS `password`*/;
-SET character_set_client = @saved_cs_client;
-
---
 -- Table structure for table `book`
 --
 
@@ -40,21 +25,21 @@ DROP TABLE IF EXISTS `book`;
 CREATE TABLE `book` (
   `book_id` int(11) NOT NULL AUTO_INCREMENT,
   `isbn` varchar(45) NOT NULL,
-  `title` varchar(45) NOT NULL,
+  `title` varchar(90) NOT NULL,
   `category` varchar(45) NOT NULL,
   `author` varchar(45) NOT NULL,
   `edition` int(11) NOT NULL,
   `publisher` varchar(45) NOT NULL,
   `pub_year` int(11) NOT NULL,
   `min_thresh` int(11) NOT NULL,
-  `buying_price` int(11) NOT NULL,
-  `selling_price` int(11) NOT NULL,
-  `cover` blob,
+  `buying_price` double(11,2) NOT NULL,
+  `selling_price` double(11,2) NOT NULL,
+  `cover` varchar(45) NOT NULL,
   `rating` int(11) DEFAULT NULL,
   PRIMARY KEY (`book_id`),
   UNIQUE KEY `book_id_UNIQUE` (`book_id`),
   UNIQUE KEY `ISBN_UNIQUE` (`isbn`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -63,6 +48,7 @@ CREATE TABLE `book` (
 
 LOCK TABLES `book` WRITE;
 /*!40000 ALTER TABLE `book` DISABLE KEYS */;
+INSERT INTO `book` VALUES (1,'9781501139154','Leonardo da Vinci','biography','Walter Isaacson',1,'Simon & Schuster',2017,5,2.50,20.99,'images/da_vinci',NULL),(2,'9781250057266','Einstein and the Rabbi: Searching for the Soul','biography','Naomi Levy',1,'Flatiron Books',2017,5,5.08,27.99,'images/einstein_rabbi',NULL),(3,'9781250044662','Renegades','fantasy','Marissa Meyer',1,'Feiwel & Friends',2017,5,2.16,19.99,'images/renegades',NULL),(4,'9780525555360','Turtles All the Way Down','fiction','John Green',1,'Penguin Young Readers Group',2017,5,1.67,19.99,'images/turtles_down',NULL),(5,'9781616207823','What Unites Us: Reflections on Patriotism','nonfiction','Dan Rather',1,'Algonquin Books of Chapel Hill',2017,5,1.94,22.95,'images/reflections_patriotism',NULL),(6,'9780385490818','The Handmaid\'s Tale','fiction','Margaret Atwood',1,'Knopf Doubleday Publishing Group',1998,5,1.16,15.95,'images/handmaid_tale',NULL),(7,'9781449474256','Milk and Honey','poetry','Rupi Kaur',1,'Andrews McMeel Publishing',2015,5,1.06,14.99,'images/milk_honey',NULL),(8,'9780735224292','Little Fires Everywhere','fiction','Celeste Ng',1,'Penguin Publishing Group',2017,5,4.32,27.00,'images/little_fires',NULL),(9,'9781442242289','War and Genocide: A Concise History of the Holocaust','history','Doris Bergen',3,'Rowman & Littlefield Publishers, Inc.',2016,5,6.81,36.59,'images/war_genocide',NULL);
 /*!40000 ALTER TABLE `book` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -104,8 +90,11 @@ DROP TABLE IF EXISTS `cart`;
 CREATE TABLE `cart` (
   `cart_id` int(11) NOT NULL,
   `promotion_id` int(11) DEFAULT NULL,
+  `totalPrice` int(11) DEFAULT NULL,
   PRIMARY KEY (`cart_id`),
-  CONSTRAINT `id` FOREIGN KEY (`cart_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `promotion_idx` (`promotion_id`),
+  CONSTRAINT `id` FOREIGN KEY (`cart_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `promotion` FOREIGN KEY (`promotion_id`) REFERENCES `promotion` (`promotion_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -142,40 +131,6 @@ LOCK TABLES `contact` WRITE;
 /*!40000 ALTER TABLE `contact` DISABLE KEYS */;
 /*!40000 ALTER TABLE `contact` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Temporary view structure for view `customer`
---
-
-DROP TABLE IF EXISTS `customer`;
-/*!50001 DROP VIEW IF EXISTS `customer`*/;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE VIEW `customer` AS SELECT 
- 1 AS `id`,
- 1 AS `name`,
- 1 AS `email`,
- 1 AS `password`,
- 1 AS `phone_number`,
- 1 AS `card_type`,
- 1 AS `card_number`,
- 1 AS `card_exp_date`*/;
-SET character_set_client = @saved_cs_client;
-
---
--- Temporary view structure for view `manager`
---
-
-DROP TABLE IF EXISTS `manager`;
-/*!50001 DROP VIEW IF EXISTS `manager`*/;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE VIEW `manager` AS SELECT 
- 1 AS `id`,
- 1 AS `name`,
- 1 AS `email`,
- 1 AS `password`*/;
-SET character_set_client = @saved_cs_client;
 
 --
 -- Table structure for table `order`
@@ -259,19 +214,56 @@ LOCK TABLES `shipment_agency` WRITE;
 UNLOCK TABLES;
 
 --
--- Temporary view structure for view `shipment_employee`
+-- Table structure for table `user_info`
 --
 
-DROP TABLE IF EXISTS `shipment_employee`;
-/*!50001 DROP VIEW IF EXISTS `shipment_employee`*/;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE VIEW `shipment_employee` AS SELECT 
- 1 AS `id`,
- 1 AS `name`,
- 1 AS `email`,
- 1 AS `password`*/;
-SET character_set_client = @saved_cs_client;
+DROP TABLE IF EXISTS `user_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_info` (
+  `id` int(11) NOT NULL,
+  `phone_number` varchar(45) NOT NULL,
+  `card_type` varchar(45) NOT NULL,
+  `card_number` varchar(45) NOT NULL,
+  `card_exp_date` datetime NOT NULL,
+  `user_id` int(11) NOT NULL,
+  KEY `id_idx` (`id`),
+  KEY `user_info_linked_id_idx` (`user_id`),
+  CONSTRAINT `user_info_linked_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_info`
+--
+
+LOCK TABLES `user_info` WRITE;
+/*!40000 ALTER TABLE `user_info` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_info` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_verification_code`
+--
+
+DROP TABLE IF EXISTS `user_verification_code`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_verification_code` (
+  `email` varchar(45) NOT NULL,
+  `code` varchar(45) NOT NULL,
+  PRIMARY KEY (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_verification_code`
+--
+
+LOCK TABLES `user_verification_code` WRITE;
+/*!40000 ALTER TABLE `user_verification_code` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_verification_code` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `users`
@@ -282,17 +274,15 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
+  `fname` varchar(45) NOT NULL,
+  `lname` varchar(45) NOT NULL,
   `email` varchar(45) NOT NULL,
   `password` varchar(45) NOT NULL,
-  `type` enum('customer','manager','admin','ship') NOT NULL,
-  `phone_number` varchar(45) DEFAULT NULL,
-  `card_type` varchar(45) DEFAULT NULL,
-  `card_number` int(11) DEFAULT NULL,
-  `card_exp_date` datetime DEFAULT NULL,
+  `type` enum('CUSTOMER','MANAGER','ADMIN','SHIP') NOT NULL,
+  `status` enum('UNVERIFIED','VERIFIED','SUSPENDED') NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -301,81 +291,9 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'','ryandryv@gmail.com','test','customer',NULL,NULL,NULL,NULL);
+INSERT INTO `users` VALUES (45,'ryan','kennedy','ryandryv@gmail.com','test','ADMIN','VERIFIED'),(47,'meep','moop','rpk72167@uga.edu','Test123','CUSTOMER','UNVERIFIED'),(82,'test','test','loqalt3@gmail.com','Test1234','CUSTOMER','VERIFIED');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Final view structure for view `admin`
---
-
-/*!50001 DROP VIEW IF EXISTS `admin`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `admin` AS select `users`.`id` AS `id`,`users`.`name` AS `name`,`users`.`email` AS `email`,`users`.`password` AS `password` from `users` where (`users`.`type` = 'admin') */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
-
---
--- Final view structure for view `customer`
---
-
-/*!50001 DROP VIEW IF EXISTS `customer`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `customer` AS select `users`.`id` AS `id`,`users`.`name` AS `name`,`users`.`email` AS `email`,`users`.`password` AS `password`,`users`.`phone_number` AS `phone_number`,`users`.`card_type` AS `card_type`,`users`.`card_number` AS `card_number`,`users`.`card_exp_date` AS `card_exp_date` from `users` where (`users`.`type` = 'customer') */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
-
---
--- Final view structure for view `manager`
---
-
-/*!50001 DROP VIEW IF EXISTS `manager`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `manager` AS select `users`.`id` AS `id`,`users`.`name` AS `name`,`users`.`email` AS `email`,`users`.`password` AS `password` from `users` where (`users`.`type` = 'manager') */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
-
---
--- Final view structure for view `shipment_employee`
---
-
-/*!50001 DROP VIEW IF EXISTS `shipment_employee`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `shipment_employee` AS select `users`.`id` AS `id`,`users`.`name` AS `name`,`users`.`email` AS `email`,`users`.`password` AS `password` from `users` where (`users`.`type` = 'ship') */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -386,4 +304,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-19 15:16:47
+-- Dump completed on 2017-11-30 20:57:23
