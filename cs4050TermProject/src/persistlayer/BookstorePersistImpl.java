@@ -31,12 +31,18 @@ public class BookstorePersistImpl {
 		String pwd = u.getPwd();
 		String sql = "SELECT * FROM users WHERE email=\"" + email + "\";";
 		String p = DbAccessImpl.getString(sql, "password");
-		Status s = Status.valueOf(DbAccessImpl.getString(sql, "status"));
+		
 		String f = DbAccessImpl.getString(sql,"fname");
+		String l = DbAccessImpl.getString(sql, "lname");
+		
 		if(p != null) {
 			if (pwd.equals(p)) {
+				Status s = Status.valueOf(DbAccessImpl.getString(sql, "status"));
+				UserType t = UserType.valueOf(DbAccessImpl.getString(sql, "type"));
 				u.setFname(f);
 				u.setStatus(s);
+				u.setType(t);
+				u.setLname(l);
 				return DbAccessImpl.getInt(sql, "id");
 			}
 		}

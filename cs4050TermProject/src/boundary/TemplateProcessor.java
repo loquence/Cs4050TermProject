@@ -30,6 +30,7 @@ public class TemplateProcessor {
 		cfg = new Configuration(Configuration.VERSION_2_3_25);//Sets the version
 		cfg.setServletContextForTemplateLoading(servletContext, templateDir);//set the servletContext
 		cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);//Sets the exception handler, which outputs errors in html on failure
+		
 	}
 	
 	/**

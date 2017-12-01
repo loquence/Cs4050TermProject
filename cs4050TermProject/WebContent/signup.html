@@ -91,7 +91,7 @@
             });
             $("#emailDiv").on('focusin focusout keyup',function(){
                 var em = $("#email").val();
-            	var val = {name:"email", email:em}
+            	var val = {page:"email"}
             	if (!em.match(re)){
                 	if (document.getElementById('invalidEmail')){
                     	}
@@ -110,7 +110,7 @@
                     	url:"BookstoreServlet",
                     	data: val,
                     	datatype:"json",
-                    	method:"GET",
+                    	method:"POST",
                     	success: function(json){
                      		
                        		if (!json.email){
