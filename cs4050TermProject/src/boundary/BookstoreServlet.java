@@ -240,6 +240,7 @@ public class BookstoreServlet extends HttpServlet {
 				
 				
 				synchronized(session) {
+					session.setAttribute("pwd",u.getPwd());
 					session.setAttribute("email", u.getEmail());
 					session.setAttribute("fname", u.getFname());
 					session.setAttribute("lname", u.getLname());
@@ -301,18 +302,30 @@ public class BookstoreServlet extends HttpServlet {
 				
 			}
 			if(session.getAttribute("type").equals(UserType.ADMIN)) {
+				Admin a = new Admin("","","","",Status.VERIFIED);
 				root.put("user", session.getAttribute("fname"));
 				if (page.equals("addBook")) {
 					
 					template="addBook.html";
-					processor.processTemplate(template, root, request, response);
+					
 				}
 				if (page.equals("editBooks")) {
 					template="editBook.html";
-					processor.processTemplate(template, root, request, response);
+					
+				}
+				if (page.equals("editUsers")) {
+					SimpleSequence userSq = a.getUsers(db);
+					root.put("userSq", userSq);
+					template="editUsers.html";
+				}
+				if (page.equals("addBookPage")) {
+					
+					template="addBook.html";
+					
 				}
 				
 			}
+			processor.processTemplate(template, root, request, response);
 			
 		}
 	}

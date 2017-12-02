@@ -1,5 +1,7 @@
 package persistlayer;
 import objectlayer.*;
+import freemarker.template.DefaultObjectWrapperBuilder;
+import freemarker.template.SimpleSequence;
 /**
  * Class that calls the DbAccessImpl methods to access the database
  * Called by classes in the Object Layer
@@ -97,6 +99,11 @@ public class BookstorePersistImpl {
 		}
 		
 		return -1;
+	}
+	
+	public SimpleSequence getUsers(DefaultObjectWrapperBuilder db) {
+		String sql = "Select id,fname,lname,email,type,status FROM users where type!='" +UserType.ADMIN + "';";
+		return DbAccessImpl.getSequence(sql, db);
 	}
 	
 	

@@ -3,10 +3,13 @@ package persistlayer;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 import freemarker.template.DefaultObjectWrapperBuilder;
 import freemarker.template.SimpleSequence;
@@ -48,6 +51,16 @@ public class DbAccessImpl {
 		}
 		return rset;
 	}// end of retrieve
+	
+	protected static ResultSetMetaData retrieveMD(ResultSet rs) {
+		ResultSetMetaData rsmd=null;
+		try {
+			rsmd = rs.getMetaData();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return rsmd;
+	}
 	/**
 	 * creates a new value in a table
 	 * @param sql
@@ -149,12 +162,14 @@ public class DbAccessImpl {
 	protected static SimpleSequence getSequence(String sql, DefaultObjectWrapperBuilder db){
 		Connection c = connect();
 		ResultSet rs = retrieve(sql, c);
+		ResultSetMetaData rsmd = retrieveMD(rs);
 		SimpleSequence sq = new SimpleSequence(db.build());
 		try {
-			
+			int columnCount = rsmd.getColumnCount();
 				while(rs.next()){
-					String temp = rs.getString(1);
-					sq.add(temp);
+					for(int i = 1;i<=columnCount;++i) {
+						sq.add(rs.getObject(i));
+					}
 				}
 			
 			}catch (SQLException e){
