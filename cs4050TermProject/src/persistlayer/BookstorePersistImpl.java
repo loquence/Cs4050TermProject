@@ -106,6 +106,10 @@ public class BookstorePersistImpl {
 		return DbAccessImpl.getSequence(sql, db);
 	}
 	
-	
+	public int addBook(Book b) {
+		String sql = "INSERT INTO book (isbn, title, category, author, edition, publisher, pub_year, min_thresh, buying_price, selling_price, cover) VALUES"
+				+ " ('"+b.getISBN()+"','"+b.getTitle()+"','"+b.getGenre()+"','"+b.getAuthor()+"',"+b.getEdition()+",'"+b.getPublisher()+"',"+b.getPublicationYear()+","+b.getMinThreshold()+","+b.getBuyingPrice()+","+b.getSellingPrice()+",'"+b.getCover()+"');" ;
+		return DbAccessImpl.create(sql);
+	}
 	
 }
