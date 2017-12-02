@@ -153,11 +153,13 @@ public class BookstoreServlet extends HttpServlet {
 			else {
 				int check = 0;
 				int test = u.createUser();
+				
 				if (test== -1) {
 					root.put("database", true);
 					processor.processTemplate("signup.html", root, request, response);
 				}
 				else {
+					
 					try {
 						/*
 						 * Calls send(email,subject,msg) which tries to send
@@ -240,7 +242,6 @@ public class BookstoreServlet extends HttpServlet {
 				
 				
 				synchronized(session) {
-					session.setAttribute("pwd",u.getPwd());
 					session.setAttribute("email", u.getEmail());
 					session.setAttribute("fname", u.getFname());
 					session.setAttribute("lname", u.getLname());
@@ -281,6 +282,7 @@ public class BookstoreServlet extends HttpServlet {
 				//add cookie?? << not sure if that will work with freemarker template
 				HttpSession session = request.getSession(true);//getting the current session on startup
 				session.setMaxInactiveInterval(1800);
+				root.put("type", session.getAttribute("type"));
 				processor.processTemplate("homepage.html", root, request, response);
 			}
 		}
@@ -302,30 +304,51 @@ public class BookstoreServlet extends HttpServlet {
 				
 			}
 			if(session.getAttribute("type").equals(UserType.ADMIN)) {
-				Admin a = new Admin("","","","",Status.VERIFIED);
 				root.put("user", session.getAttribute("fname"));
 				if (page.equals("addBook")) {
 					
-					template="addBook.html";
+					Admin a = new Admin("","","","",Status.VERIFIED);
 					
+					
+					
+					
+					//attempting to add book
+					String title = request.getParameter("title");
+					String author = request.getParameter("author");
+					String publisher = request.getParameter("publisher");
+					String genre = request.getParameter("genre");
+					String ISBN = request.getParameter("isbn");
+					String pubYear = request.getParameter("pubYear");
+					String edition = request.getParameter("edition");
+					String threshold = request.getParameter("min");
+					String sellP = request.getParameter("sellPrice");
+					String buyP = request.getParameter("buyPrice");
+					String cover = request.getParameter("cover");
+					String quant = request.getParameter("quantity");
+					
+					
+					
+					Integer pubY = Integer.valueOf(pubYear);
+					Integer ed = Integer.valueOf(edition);
+					Integer minThresh = Integer.valueOf(threshold);
+					Integer quantity = Integer.valueOf(quant);
+					double sell = Double.parseDouble(sellP);
+					double buy = Double.parseDouble(buyP);
+					
+					Book b = new Book(ISBN, title, genre, author, ed, publisher, pubY, quantity, /*int rating,*/ cover, sell, buy, minThresh);
+					int check = a.addBook(b);
+					
+				}
+				if(page.equals("addBookPage")) {
+					template="addBook.html";
+					processor.processTemplate(template, root, request, response);
 				}
 				if (page.equals("editBooks")) {
 					template="editBook.html";
-					
-				}
-				if (page.equals("editUsers")) {
-					SimpleSequence userSq = a.getUsers(db);
-					root.put("userSq", userSq);
-					template="editUsers.html";
-				}
-				if (page.equals("addBookPage")) {
-					
-					template="addBook.html";
-					
+					processor.processTemplate(template, root, request, response);
 				}
 				
 			}
-			processor.processTemplate(template, root, request, response);
 			
 		}
 	}
