@@ -4,23 +4,22 @@ import javax.swing.text.html.ImageView;
 
 public class Book {
 	
-	private int ISBN;
+	private String ISBN;
 	private String title;
 	private String genre;
 	private String author;	//should split into f and l?
 	private int edition;
 	private String publisher;
 	private int publicationYear;
-	private int threshold;
 	private int quantity;
 	private int rating;
 	private String cover;	//Should be path to where images are stored
-	private int sellingPrice;
-	private int buyingPrice;
+	private double sellingPrice;
+	private double buyingPrice;
 	private int minThreshold;
 	
-	public Book(int iSBN, String title, String genre, String author, int edition, String publisher, int publicationYear,
-			int quantity, int rating, String cover, int sellingPrice, int buyingPrice, int minThreshold) {
+	public Book(String iSBN, String title, String genre, String author, int edition, String publisher, int publicationYear,
+			int quantity, /*int rating,*/ String cover, double sellingPrice, double buyingPrice, int minThreshold) {
 		super();
 		ISBN = iSBN;
 		this.title = title;
@@ -30,17 +29,17 @@ public class Book {
 		this.publisher = publisher;
 		this.publicationYear = publicationYear;
 		this.quantity = quantity;
-		this.rating = rating;
+		//this.rating = rating;
 		this.cover = cover;
 		this.sellingPrice = sellingPrice;
 		this.buyingPrice = buyingPrice;
 		this.minThreshold = minThreshold;
 	}
 	
-	public int getISBN() {
+	public String getISBN() {
 		return ISBN;
 	}
-	public void setISBN(int iSBN) {
+	public void setISBN(String iSBN) {
 		ISBN = iSBN;
 	}
 	
@@ -107,14 +106,14 @@ public class Book {
 		this.cover = cover;
 	}
 	
-	public int getSellingPrice() {
+	public double getSellingPrice() {
 		return sellingPrice;
 	}
 	public void setSellingPrice(int sellingPrice) {
 		this.sellingPrice = sellingPrice;
 	}
 	
-	public int getBuyingPrice() {
+	public double getBuyingPrice() {
 		return buyingPrice;
 	}
 	public void setBuyingPrice(int buyingPrice) {
