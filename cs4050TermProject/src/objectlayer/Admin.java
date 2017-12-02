@@ -13,5 +13,8 @@ public class Admin extends User {
 		return getPersist().getUsers(db);
 	}
 	
+	public int addBook(Book b) {
+		return getPersist().addBook(b);
+	}	
 	
 }
