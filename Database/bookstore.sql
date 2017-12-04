@@ -35,11 +35,12 @@ CREATE TABLE `book` (
   `buying_price` double(11,2) NOT NULL,
   `selling_price` double(11,2) NOT NULL,
   `cover` varchar(45) NOT NULL,
+  `quantity` int(11) NOT NULL,
   `rating` int(11) DEFAULT NULL,
   PRIMARY KEY (`book_id`),
   UNIQUE KEY `book_id_UNIQUE` (`book_id`),
   UNIQUE KEY `ISBN_UNIQUE` (`isbn`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -48,7 +49,7 @@ CREATE TABLE `book` (
 
 LOCK TABLES `book` WRITE;
 /*!40000 ALTER TABLE `book` DISABLE KEYS */;
-INSERT INTO `book` VALUES (1,'9781501139154','Leonardo da Vinci','biography','Walter Isaacson',1,'Simon & Schuster',2017,5,2.50,20.99,'images/da_vinci',NULL),(2,'9781250057266','Einstein and the Rabbi: Searching for the Soul','biography','Naomi Levy',1,'Flatiron Books',2017,5,5.08,27.99,'images/einstein_rabbi',NULL),(3,'9781250044662','Renegades','fantasy','Marissa Meyer',1,'Feiwel & Friends',2017,5,2.16,19.99,'images/renegades',NULL),(4,'9780525555360','Turtles All the Way Down','fiction','John Green',1,'Penguin Young Readers Group',2017,5,1.67,19.99,'images/turtles_down',NULL),(5,'9781616207823','What Unites Us: Reflections on Patriotism','nonfiction','Dan Rather',1,'Algonquin Books of Chapel Hill',2017,5,1.94,22.95,'images/reflections_patriotism',NULL),(6,'9780385490818','The Handmaid\'s Tale','fiction','Margaret Atwood',1,'Knopf Doubleday Publishing Group',1998,5,1.16,15.95,'images/handmaid_tale',NULL),(7,'9781449474256','Milk and Honey','poetry','Rupi Kaur',1,'Andrews McMeel Publishing',2015,5,1.06,14.99,'images/milk_honey',NULL),(8,'9780735224292','Little Fires Everywhere','fiction','Celeste Ng',1,'Penguin Publishing Group',2017,5,4.32,27.00,'images/little_fires',NULL),(9,'9781442242289','War and Genocide: A Concise History of the Holocaust','history','Doris Bergen',3,'Rowman & Littlefield Publishers, Inc.',2016,5,6.81,36.59,'images/war_genocide',NULL);
+INSERT INTO `book` VALUES (1,'9781501139154','Leonardo da Vinci','biography','Walter Isaacson',1,'Simon & Schuster',2017,5,2.50,20.99,'images/da_vinci.jpg',15,NULL),(2,'9781250057266','Einstein and the Rabbi: Searching for the Soul','biography','Naomi Levy',1,'Flatiron Books',2017,5,5.08,27.99,'images/einstein_rabbi.jpg',15,NULL),(3,'9781250044662','Renegades','fantasy','Marissa Meyer',1,'Feiwel & Friends',2017,5,2.16,19.99,'images/renegades.jpg',15,NULL),(4,'9780525555360','Turtles All the Way Down','fiction','John Green',1,'Penguin Young Readers Group',2017,5,1.67,19.99,'images/turtles_down.jpg',15,NULL),(5,'9781616207823','What Unites Us: Reflections on Patriotism','nonfiction','Dan Rather',1,'Algonquin Books of Chapel Hill',2017,5,1.94,22.95,'images/reflections_patriotism.jpg',15,NULL),(6,'9780385490818','The Handmaid\'s Tale','fiction','Margaret Atwood',1,'Knopf Doubleday Publishing Group',1998,5,1.16,15.95,'images/handmaid_tale.jpg',15,NULL),(7,'9781449474256','Milk and Honey','poetry','Rupi Kaur',1,'Andrews McMeel Publishing',2015,5,1.06,14.99,'images/milk_honey.jpg',15,NULL),(8,'9780735224292','Little Fires Everywhere','fiction','Celeste Ng',1,'Penguin Publishing Group',2017,5,4.32,27.00,'images/little_fires.jpg',15,NULL),(9,'9781442242289','War and Genocide: A Concise History of the Holocaust','history','Doris Bergen',3,'Rowman & Littlefield Publishers, Inc.',2016,5,6.81,36.59,'images/war_genocide.jpg',15,NULL),(10,'9781101971062','Homegoing','historical fiction','Yaa Gyasi',1,'Knopf Doubleday Publishing Group',2016,5,2.84,10.99,'images/homegoing.jpg',15,NULL),(11,'9780451157447','Carrie','horror','Stephen King',1,'Penguin Publishing Group',1974,5,1.05,6.99,'images/carrie.jpg',15,NULL),(12,'9781488022722','The Lady Travelers Guide to Larceny with a Dashing Stranger','romance','Victoria Alexander',1,'Harlequin',2017,5,0.75,5.99,'images/lady_traveler.jpg',15,NULL),(13,'9781250122520','The Language of Thorns: Midnight Tales and Dangerous Magic','fantasy','Leigh Bardugo',1,'Imprint',2017,5,3.84,13.29,'images/language_thorns.jpg',15,NULL),(14,'9781496708885','Death by Eggnog','mystery','Alex Erickson',1,'Kensington',2017,5,0.24,3.89,'images/eggnog.jpg',15,NULL),(15,'9781566199155','Les Misérables','historical fiction','Victor Hugo',1,'Barnes & Noble Books',1996,5,5.85,14.99,'images/les_mis.jpg',15,NULL);
 /*!40000 ALTER TABLE `book` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -90,11 +91,11 @@ DROP TABLE IF EXISTS `cart`;
 CREATE TABLE `cart` (
   `cart_id` int(11) NOT NULL,
   `promotion_id` int(11) DEFAULT NULL,
-  `totalPrice` int(11) DEFAULT NULL,
+  `totalPrice` double NOT NULL,
   PRIMARY KEY (`cart_id`),
   KEY `promotion_idx` (`promotion_id`),
   CONSTRAINT `id` FOREIGN KEY (`cart_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `promotion` FOREIGN KEY (`promotion_id`) REFERENCES `promotion` (`promotion_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `promotion` FOREIGN KEY (`promotion_id`) REFERENCES `promotion` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -168,11 +169,11 @@ DROP TABLE IF EXISTS `promotion`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `promotion` (
-  `promotion_id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `code` varchar(45) NOT NULL,
   `percentage` double NOT NULL,
   `expiration` datetime NOT NULL,
-  PRIMARY KEY (`promotion_id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -221,16 +222,18 @@ DROP TABLE IF EXISTS `user_info`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_info` (
-  `id` int(11) NOT NULL,
   `phone_number` varchar(45) NOT NULL,
   `card_type` varchar(45) NOT NULL,
   `card_number` varchar(45) NOT NULL,
   `card_exp_date` datetime NOT NULL,
+  `user_info_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
-  KEY `id_idx` (`id`),
-  KEY `user_info_linked_id_idx` (`user_id`),
+  `address` varchar(45) NOT NULL,
+  PRIMARY KEY (`user_info_id`),
+  KEY `user_info_linked_id_idx` (`user_info_id`),
+  KEY `user_info_linked_id_idx1` (`user_id`),
   CONSTRAINT `user_info_linked_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -239,6 +242,7 @@ CREATE TABLE `user_info` (
 
 LOCK TABLES `user_info` WRITE;
 /*!40000 ALTER TABLE `user_info` DISABLE KEYS */;
+INSERT INTO `user_info` VALUES ('9088388567','Visa','1234567890','2017-01-01 00:00:00',2,89,'DootleBerg');
 /*!40000 ALTER TABLE `user_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -282,7 +286,7 @@ CREATE TABLE `users` (
   `status` enum('UNVERIFIED','VERIFIED','SUSPENDED') NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -291,7 +295,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (45,'ryan','kennedy','ryandryv@gmail.com','test','ADMIN','VERIFIED'),(47,'meep','moop','rpk72167@uga.edu','Test123','CUSTOMER','UNVERIFIED'),(82,'test','test','loqalt3@gmail.com','Test1234','CUSTOMER','VERIFIED');
+INSERT INTO `users` VALUES (45,'ryan','kennedy','ryandryv@gmail.com','test','ADMIN','VERIFIED'),(47,'meep','moop','rpk72167@uga.edu','Test123','CUSTOMER','UNVERIFIED'),(82,'test','test','loqalt3@gmail.com','Test1234','CUSTOMER','VERIFIED'),(83,'Kaitlyn','Smith','kes35271@uga.edu','qwerty123','CUSTOMER','VERIFIED'),(84,'Noot','Noot','smith.kaitlynelizabeth@gmail.com','test','ADMIN','VERIFIED'),(86,'test','test','loqalt1@gmail.com','test1235','CUSTOMER','VERIFIED'),(89,'test','test','loqalt2@gmail.com','test1234','CUSTOMER','VERIFIED');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -304,4 +308,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-11-30 20:57:23
+-- Dump completed on 2017-12-04  1:04:15
