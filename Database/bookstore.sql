@@ -64,11 +64,14 @@ CREATE TABLE `books_in_cart` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `cart_id` int(11) NOT NULL,
   `book_id` int(11) NOT NULL,
+  `order_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `book_idx` (`book_id`),
   KEY `cart_idx` (`cart_id`),
-  CONSTRAINT `book` FOREIGN KEY (`book_id`) REFERENCES `book` (`book_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `cart` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`cart_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `order_idx` (`order_id`),
+  CONSTRAINT `book` FOREIGN KEY (`book_id`) REFERENCES `book` (`book_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `cart` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`cart_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `order` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -91,11 +94,11 @@ DROP TABLE IF EXISTS `cart`;
 CREATE TABLE `cart` (
   `cart_id` int(11) NOT NULL,
   `promotion_id` int(11) DEFAULT NULL,
-  `totalPrice` double NOT NULL,
+  `totalPrice` double DEFAULT '0',
   PRIMARY KEY (`cart_id`),
   KEY `promotion_idx` (`promotion_id`),
-  CONSTRAINT `id` FOREIGN KEY (`cart_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `promotion` FOREIGN KEY (`promotion_id`) REFERENCES `promotion` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `id` FOREIGN KEY (`cart_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `promotion` FOREIGN KEY (`promotion_id`) REFERENCES `promotion` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -105,6 +108,7 @@ CREATE TABLE `cart` (
 
 LOCK TABLES `cart` WRITE;
 /*!40000 ALTER TABLE `cart` DISABLE KEYS */;
+INSERT INTO `cart` VALUES (95,NULL,0);
 /*!40000 ALTER TABLE `cart` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -148,7 +152,7 @@ CREATE TABLE `order` (
   `order_created` tinyint(4) NOT NULL,
   PRIMARY KEY (`order_id`),
   KEY `customer_id_idx` (`customer_id`),
-  CONSTRAINT `customer_id` FOREIGN KEY (`customer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `customer_id` FOREIGN KEY (`customer_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -256,7 +260,8 @@ DROP TABLE IF EXISTS `user_verification_code`;
 CREATE TABLE `user_verification_code` (
   `email` varchar(45) NOT NULL,
   `code` varchar(45) NOT NULL,
-  PRIMARY KEY (`email`)
+  PRIMARY KEY (`email`),
+  CONSTRAINT `email` FOREIGN KEY (`email`) REFERENCES `users` (`email`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -286,7 +291,7 @@ CREATE TABLE `users` (
   `status` enum('UNVERIFIED','VERIFIED','SUSPENDED') NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=96 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -295,7 +300,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (45,'ryan','kennedy','ryandryv@gmail.com','test','ADMIN','VERIFIED'),(47,'meep','moop','rpk72167@uga.edu','Test123','CUSTOMER','UNVERIFIED'),(82,'test','test','loqalt3@gmail.com','Test1234','CUSTOMER','VERIFIED'),(83,'Kaitlyn','Smith','kes35271@uga.edu','qwerty123','CUSTOMER','VERIFIED'),(84,'Noot','Noot','smith.kaitlynelizabeth@gmail.com','test','ADMIN','VERIFIED'),(86,'test','test','loqalt1@gmail.com','test1235','CUSTOMER','VERIFIED'),(89,'test','test','loqalt2@gmail.com','test1234','CUSTOMER','VERIFIED');
+INSERT INTO `users` VALUES (45,'ryan','kennedy','ryandryv@gmail.com','test','ADMIN','VERIFIED'),(82,'test','test','loqalt3@gmail.com','Test1234','CUSTOMER','SUSPENDED'),(83,'Kaitlyn','Smith','kes35271@uga.edu','qwerty123','CUSTOMER','VERIFIED'),(84,'Noot','Noot','smith.kaitlynelizabeth@gmail.com','test','ADMIN','VERIFIED'),(86,'test','test','loqalt1@gmail.com','test1235','CUSTOMER','SUSPENDED'),(89,'test','test','loqalt2@gmail.com','test1234','CUSTOMER','VERIFIED'),(95,'Ryan','Kennedy','rpk72167@uga.edu','test1234','CUSTOMER','VERIFIED');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -308,4 +313,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-12-04  1:04:15
+-- Dump completed on 2017-12-04 17:38:03
